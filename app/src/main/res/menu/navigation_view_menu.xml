@@ -1,4 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:icon="@drawable/ic_home_black_24dp"
+        android:title="Inicio"
+        android:id="@+id/menuInicio"/>
+    <item
+        android:icon="@drawable/ic_person_black_24dp"
+        android:title="Mi cuenta"
+        android:id="@+id/menuPerfil"/>
 
+    <item
+        android:icon="@drawable/ic_info_black_24dp"
+        android:title="About us"
+        android:id="@+id/menuAboutUs"/>
 </menu>

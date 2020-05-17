@@ -1,14 +1,26 @@
-package com.example.mercadoesclavoentregable;
+package com.example.mercadoesclavoentregable.model;
 
-public class Producto {
+import java.io.Serializable;
+
+public class Producto implements Serializable {
     private String nombreProducto;
     private Double precioProducto;
     private Integer fotoProducto;
+    private String descripcionProducto;
 
-    public Producto(String nombreProducto, Double precioProducto, Integer fotoProducto) {
+    public String getDescripcionProducto() {
+        return descripcionProducto;
+    }
+
+    public void setDescripcionProducto(String descripcionProducto) {
+        this.descripcionProducto = descripcionProducto;
+    }
+
+    public Producto(String nombreProducto, Double precioProducto, Integer fotoProducto, String descripcionProducto) {
         this.nombreProducto = nombreProducto;
         this.precioProducto = precioProducto;
         this.fotoProducto = fotoProducto;
+        this.descripcionProducto = descripcionProducto;
     }
 
     public String getNombreProducto() {

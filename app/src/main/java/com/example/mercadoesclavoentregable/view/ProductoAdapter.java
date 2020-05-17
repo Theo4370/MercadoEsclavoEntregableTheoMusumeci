@@ -18,11 +18,13 @@ public class ProductoAdapter extends RecyclerView.Adapter<ProductoAdapter.Produc
 
 
     private List<Producto> listaDeProductos;
+    private ProductoAdapterListener productoAdapterListener;
     //TODO crear el listener
     //private ProductosAdapterListener listener;
 
-    public ProductoAdapter(List<Producto> listaDeProductos) {
+    public ProductoAdapter(List<Producto> listaDeProductos, ProductoAdapterListener listener) {
         this.listaDeProductos = listaDeProductos;
+        this.productoAdapterListener = listener;
     }
 
     @NonNull
@@ -61,8 +63,26 @@ public class ProductoAdapter extends RecyclerView.Adapter<ProductoAdapter.Produc
             precioProducto = itemView.findViewById(R.id.celdaArticuloTextViewPrecio);
             fotoProducto = itemView.findViewById(R.id.celdaArticuloImageViewFoto);
 
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Producto producto = listaDeProductos.get(getAdapterPosition());
+                    productoAdapterListener.onClickProductoAdapterListener(producto);
+                }
+            });
+
         }
 
         public void cargarProducto(Producto unProducto) {
             nombreProducto.setText(unProducto.getNombreProducto());
-            precioProducto.setText(unProducto.getPrecioProducto().t
+            precioProducto.setText(unProducto.getPrecioProducto().toString());
+            fotoProducto.setImageResource(unProducto.getFotoProducto());
+        }
+
+
+    }
+
+    public interface ProductoAdapterListener {
+        public void onClickProductoAdapterListener(Producto producto);
+    }
+}
