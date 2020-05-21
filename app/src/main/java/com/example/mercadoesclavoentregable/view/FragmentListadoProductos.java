@@ -13,7 +13,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.mercadoesclavoentregable.R;
-import com.example.mercadoesclavoentregable.dao.ProveedorDeProductos;
+import com.example.mercadoesclavoentregable.controller.ProductoController;
+import com.example.mercadoesclavoentregable.dao.ProductoDao;
 import com.example.mercadoesclavoentregable.model.Producto;
 
 import java.util.List;
@@ -41,7 +42,10 @@ public class FragmentListadoProductos extends Fragment implements ProductoAdapte
 
         RecyclerView recyclerViewProductos = fragmentInflado.findViewById(R.id.fragmentListadoRecyclerView);
 
-        List<Producto> listaDeProductos = ProveedorDeProductos.getProducto();
+
+        ProductoController productoController = new ProductoController();
+
+        List<Producto> listaDeProductos = productoController.getProducto();
         ProductoAdapter productoAdapter = new ProductoAdapter(listaDeProductos, this);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(fragmentInflado.getContext(), LinearLayoutManager.VERTICAL, false);

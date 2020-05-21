@@ -6,7 +6,7 @@ import com.example.mercadoesclavoentregable.model.Producto;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class ProveedorDeProductos {
+public abstract class ProductoDao {
 
     public static List<Producto> getProducto() {
         List<Producto> listaDeProductos = new ArrayList<>();
