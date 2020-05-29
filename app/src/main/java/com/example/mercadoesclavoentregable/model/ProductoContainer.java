@@ -2,10 +2,11 @@ package com.example.mercadoesclavoentregable.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProductoContainer {
+public class ProductoContainer implements Serializable {
     @SerializedName("query")
     private String query;
 

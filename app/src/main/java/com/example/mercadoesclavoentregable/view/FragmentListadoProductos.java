@@ -1,6 +1,7 @@
 package com.example.mercadoesclavoentregable.view;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -43,8 +44,19 @@ public class FragmentListadoProductos extends Fragment implements ProductoAdapte
 
 
         recyclerViewProductos = fragmentInflado.findViewById(R.id.fragmentListadoRecyclerView);
+        Bundle bundle = getArguments();
+        ProductoContainer productoContainer =  (ProductoContainer) bundle.getSerializable("productos");
+        List<Producto> productoList = productoContainer.getProductoList();
 
-        ProductoController productoController = new ProductoController();
+
+
+        ProductoAdapter productoAdapter = new ProductoAdapter(productoList, this);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+
+        recyclerViewProductos.setLayoutManager(linearLayoutManager);
+        recyclerViewProductos.setAdapter(productoAdapter);
+
+       /* ProductoController productoController = new ProductoController();
         productoController.getProductoPorSearch(new ResultListener<ProductoContainer>() {
             @Override
             public void onFinish(ProductoContainer result) {
@@ -53,7 +65,7 @@ public class FragmentListadoProductos extends Fragment implements ProductoAdapte
                 recyclerViewProductos.setLayoutManager(linearLayoutManager);
                 recyclerViewProductos.setAdapter(productoAdapter);
             }
-        });
+        });*/
 
         return fragmentInflado;
     }
