@@ -16,6 +16,8 @@ import com.example.mercadoesclavoentregable.R;
 import com.example.mercadoesclavoentregable.controller.ProductoController;
 import com.example.mercadoesclavoentregable.dao.ProductoDao;
 import com.example.mercadoesclavoentregable.model.Producto;
+import com.example.mercadoesclavoentregable.model.ProductoContainer;
+import com.example.mercadoesclavoentregable.util.ResultListener;
 
 import java.util.List;
 
@@ -23,7 +25,7 @@ import java.util.List;
 public class FragmentListadoProductos extends Fragment implements ProductoAdapter.ProductoAdapterListener {
 
     private FragmentListadoProductosListener fragmentListadoProductosListener;
-
+    private RecyclerView recyclerViewProductos;
 
     public FragmentListadoProductos() {
 
@@ -40,19 +42,19 @@ public class FragmentListadoProductos extends Fragment implements ProductoAdapte
         View fragmentInflado = inflater.inflate(R.layout.fragment_listado_productos, container, false);
 
 
-        RecyclerView recyclerViewProductos = fragmentInflado.findViewById(R.id.fragmentListadoRecyclerView);
-
+        recyclerViewProductos = fragmentInflado.findViewById(R.id.fragmentListadoRecyclerView);
 
         ProductoController productoController = new ProductoController();
+        productoController.getProductoPorSearch(new ResultListener<ProductoContainer>() {
+            @Override
+            public void onFinish(ProductoContainer result) {
+                ProductoAdapter productoAdapter = new ProductoAdapter(result.getProductoList(), FragmentListadoProductos.this);
+                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+                recyclerViewProductos.setLayoutManager(linearLayoutManager);
+                recyclerViewProductos.setAdapter(productoAdapter);
+            }
+        });
 
-        List<Producto> listaDeProductos = productoController.getProducto();
-        ProductoAdapter productoAdapter = new ProductoAdapter(listaDeProductos, this);
-
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(fragmentInflado.getContext(), LinearLayoutManager.VERTICAL, false);
-        recyclerViewProductos.setLayoutManager(linearLayoutManager);
-
-
-        recyclerViewProductos.setAdapter(productoAdapter);
         return fragmentInflado;
     }
 
@@ -62,6 +64,7 @@ public class FragmentListadoProductos extends Fragment implements ProductoAdapte
         fragmentListadoProductosListener.onClick(producto);
 
     }
+
     public interface FragmentListadoProductosListener {
         public void onClick(Producto producto);
 

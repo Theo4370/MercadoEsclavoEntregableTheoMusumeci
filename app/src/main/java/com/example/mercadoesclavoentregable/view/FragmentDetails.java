@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.mercadoesclavoentregable.R;
 import com.example.mercadoesclavoentregable.model.Producto;
 
@@ -36,9 +37,11 @@ public class FragmentDetails extends Fragment {
         TextView textViewProducto = view.findViewById(R.id.detailsProductoTextView);
         TextView textViewDescripcion = view.findViewById(R.id.detailsProductoDescripción);
 
-        imageViewProducto.setImageResource(producto.getFotoProducto());
-        textViewProducto.setText(producto.getNombreProducto());
-        textViewDescripcion.setText(producto.getDescripcionProducto());
+        Glide.with(getContext())
+                .load(producto.getFotoProducto())
+                .into(imageViewProducto);
+        textViewProducto.setText(producto.getTitle());
+        textViewDescripcion.setText(producto.getPrice().toString());
 
 
         return view;
