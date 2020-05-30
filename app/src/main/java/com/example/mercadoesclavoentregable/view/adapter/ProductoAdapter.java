@@ -1,4 +1,4 @@
-package com.example.mercadoesclavoentregable.view;
+package com.example.mercadoesclavoentregable.view.adapter;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -80,7 +80,7 @@ public class ProductoAdapter extends RecyclerView.Adapter<ProductoAdapter.Produc
 
         public void onBind(Producto unProducto) {
             Glide.with(nombreProducto.getContext())
-                    .load(unProducto.getFotoProducto())
+                    .load(unProducto.getThumbnail())
                     .into(fotoProducto);
 
             precioProducto.setText(unProducto.getPrice().toString());

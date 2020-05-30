@@ -1,7 +1,6 @@
-package com.example.mercadoesclavoentregable.view;
+package com.example.mercadoesclavoentregable.view.fragment;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -14,11 +13,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.mercadoesclavoentregable.R;
-import com.example.mercadoesclavoentregable.controller.ProductoController;
-import com.example.mercadoesclavoentregable.dao.ProductoDao;
 import com.example.mercadoesclavoentregable.model.Producto;
 import com.example.mercadoesclavoentregable.model.ProductoContainer;
-import com.example.mercadoesclavoentregable.util.ResultListener;
+import com.example.mercadoesclavoentregable.view.adapter.ProductoAdapter;
 
 import java.util.List;
 
@@ -56,16 +53,6 @@ public class FragmentListadoProductos extends Fragment implements ProductoAdapte
         recyclerViewProductos.setLayoutManager(linearLayoutManager);
         recyclerViewProductos.setAdapter(productoAdapter);
 
-       /* ProductoController productoController = new ProductoController();
-        productoController.getProductoPorSearch(new ResultListener<ProductoContainer>() {
-            @Override
-            public void onFinish(ProductoContainer result) {
-                ProductoAdapter productoAdapter = new ProductoAdapter(result.getProductoList(), FragmentListadoProductos.this);
-                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-                recyclerViewProductos.setLayoutManager(linearLayoutManager);
-                recyclerViewProductos.setAdapter(productoAdapter);
-            }
-        });*/
 
         return fragmentInflado;
     }

@@ -1,4 +1,4 @@
-package com.example.mercadoesclavoentregable.view;
+package com.example.mercadoesclavoentregable.view.fragment;
 
 import android.os.Bundle;
 
@@ -38,7 +38,7 @@ public class FragmentDetails extends Fragment {
         TextView textViewDescripcion = view.findViewById(R.id.detailsProductoDescripción);
 
         Glide.with(getContext())
-                .load(producto.getFotoProducto())
+                .load(producto.getThumbnail())
                 .into(imageViewProducto);
         textViewProducto.setText(producto.getTitle());
         textViewDescripcion.setText(producto.getPrice().toString());

@@ -1,23 +1,26 @@
-package com.example.mercadoesclavoentregable.view;
+package com.example.mercadoesclavoentregable;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.example.mercadoesclavoentregable.R;
 import com.example.mercadoesclavoentregable.controller.ProductoController;
 import com.example.mercadoesclavoentregable.model.Producto;
 import com.example.mercadoesclavoentregable.model.ProductoContainer;
 import com.example.mercadoesclavoentregable.util.ResultListener;
+import com.example.mercadoesclavoentregable.view.fragment.AboutUsFragment;
+import com.example.mercadoesclavoentregable.view.fragment.FragmentDetails;
+import com.example.mercadoesclavoentregable.view.fragment.FragmentListadoProductos;
 import com.google.android.material.navigation.NavigationView;
 
 public class MainActivity extends AppCompatActivity implements FragmentListadoProductos.FragmentListadoProductosListener {
@@ -25,11 +28,8 @@ public class MainActivity extends AppCompatActivity implements FragmentListadoPr
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
     private FragmentListadoProductos fragmentListadoProductos;
-
-
-    private RecyclerView recyclerView;
-
     private ProductoController productoController;
+    private Toolbar toolbar;
 
 
     @Override
@@ -39,21 +39,39 @@ public class MainActivity extends AppCompatActivity implements FragmentListadoPr
 
         findViewById();
         navigationView();
-        productoController = new ProductoController();
-        fragmentListadoProductos = new FragmentListadoProductos();
-
-
+        toolBar();
         pegarProductosAlRecycler();
 
+        productoController = new ProductoController();
+        productoController.getProductoById("MLA635031069", new ResultListener<Producto>() {
+            @Override
+            public void onFinish(Producto result) {
+                result.getPictures().get(0).getSecureUrl();
 
-        //fragmentListadoProductos = new FragmentListadoProductos();
+            }
+        });
 
 
     }
 
-    private void pegarProductosAlRecycler() {
+    /**
+     * Configuracion de toolBar
+     */
+    private void toolBar() {
+        toolbar.setTitle("Home");
+        setSupportActionBar(toolbar);
+        ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open_drawers, R.string.close_drawers);
+        drawerLayout.addDrawerListener(actionBarDrawerToggle);
+        actionBarDrawerToggle.syncState();
+    }
 
-        productoController.getProductoPorSearch(new ResultListener<ProductoContainer>() {
+    /**
+     * Metodo que recibe el pedido de internet y pega los productos al recycler
+     */
+    private void pegarProductosAlRecycler() {
+        productoController = new ProductoController();
+        fragmentListadoProductos = new FragmentListadoProductos();
+        productoController.getProductoPorSearch("Rx 570", new ResultListener<ProductoContainer>() {
             @Override
             public void onFinish(ProductoContainer result) {
 
@@ -76,8 +94,7 @@ public class MainActivity extends AppCompatActivity implements FragmentListadoPr
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.menuInicio:
-                        FragmentListadoProductos fragmentListadoProductos = new FragmentListadoProductos();
-                        pegarFragment(fragmentListadoProductos);
+                        pegarProductosAlRecycler();
                         drawerLayout.closeDrawers();
                         break;
                     case R.id.menuPerfil:
@@ -104,6 +121,7 @@ public class MainActivity extends AppCompatActivity implements FragmentListadoPr
     private void findViewById() {
         navigationView = findViewById(R.id.navigationView);
         drawerLayout = findViewById(R.id.drawerLayout);
+        toolbar = findViewById(R.id.toolBar);
     }
 
     private void pegarFragment(Fragment fragment) {
@@ -132,5 +150,28 @@ public class MainActivity extends AppCompatActivity implements FragmentListadoPr
             super.onBackPressed();
         }
 
+    }
+
+    /**
+     * Inflo el appBar (toolBar)
+     */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.appbar_menu, menu);
+        return true;
+    }
+
+    /**
+     * Configuro botones del appBar (toolBar)
+     */
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.appBarFavoritosButton:
+
+                //Pasar al fragment favoritos
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

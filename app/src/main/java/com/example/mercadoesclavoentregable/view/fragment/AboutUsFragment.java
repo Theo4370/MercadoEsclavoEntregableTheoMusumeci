@@ -1,4 +1,4 @@
-package com.example.mercadoesclavoentregable.view;
+package com.example.mercadoesclavoentregable.view.fragment;
 
 import android.os.Bundle;
 

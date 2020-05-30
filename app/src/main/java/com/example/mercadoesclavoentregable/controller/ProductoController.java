@@ -16,19 +16,21 @@ public class ProductoController {
         };
     }
 
-    public void getProductoPorSearch(final ResultListener<ProductoContainer> resultListenerFromView) {
-        productoDao.getProductoPorSearch(new ResultListener<ProductoContainer>() {
+    public void getProductoPorSearch(String id, final ResultListener<ProductoContainer> resultListenerFromView) {
+        productoDao.getProductoPorSearch(id, new ResultListener<ProductoContainer>() {
             @Override
             public void onFinish(ProductoContainer result) {
                 resultListenerFromView.onFinish(result);
             }
         });
+    }
 
-   /*
-    public List<Producto> getProducto(){
-        List<Producto> listaDeProductos = ProductoDao.getProducto();
-    return listaDeProductos;
-    }*/
-        // resultListenerFromView.onFinish(result);
+    public void getProductoById(String id, final ResultListener<Producto> resultListeneFromView){
+        productoDao.getProductoById(id, new ResultListener<Producto>() {
+            @Override
+            public void onFinish(Producto result) {
+                resultListeneFromView.onFinish(result);
+            }
+        });
     }
 }
