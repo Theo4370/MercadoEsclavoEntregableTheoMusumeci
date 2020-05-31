@@ -19,21 +19,21 @@ public class Producto implements Serializable {
     private String thumbnail;
 
     private String condition;
-   // @SerializedName("descriptions")
-    private String descripcion;
+    @SerializedName("plain_text")
+    private String plainText;
 
 
     public Producto() {
 
     }
 
-    public Producto(String id, String title, Double price, String fotoProducto, String condition, String descripcion, List<Producto> pictures, String secureUrl) {
+    public Producto(String id, String title, Double price, String fotoProducto, String condition, String plainText, List<Producto> pictures, String secureUrl) {
         this.id = id;
         this.title = title;
         this.price = price;
         this.thumbnail = fotoProducto;
         this.condition = condition;
-        this.descripcion = descripcion;
+        this.plainText = plainText;
         this.secureUrl = secureUrl;
         this.pictures = pictures;
     }
@@ -56,11 +56,11 @@ public class Producto implements Serializable {
 
 
     public String getDescripcion() {
-        return descripcion;
+        return plainText;
     }
 
     public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
+        this.plainText = plainText;
     }
 
     public String getId() {

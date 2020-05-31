@@ -23,6 +23,8 @@ import com.example.mercadoesclavoentregable.view.fragment.FragmentDetails;
 import com.example.mercadoesclavoentregable.view.fragment.FragmentListadoProductos;
 import com.google.android.material.navigation.NavigationView;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity implements FragmentListadoProductos.FragmentListadoProductosListener {
 
     private DrawerLayout drawerLayout;
@@ -41,15 +43,6 @@ public class MainActivity extends AppCompatActivity implements FragmentListadoPr
         navigationView();
         toolBar();
         pegarProductosAlRecycler();
-
-        productoController = new ProductoController();
-        productoController.getProductoById("MLA635031069", new ResultListener<Producto>() {
-            @Override
-            public void onFinish(Producto result) {
-                result.getPictures().get(0).getSecureUrl();
-
-            }
-        });
 
 
     }
@@ -133,12 +126,24 @@ public class MainActivity extends AppCompatActivity implements FragmentListadoPr
     }
 
     @Override
-    public void onClick(Producto producto) {
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("Producto", producto);
-        FragmentDetails fragmentDetails = new FragmentDetails();
-        fragmentDetails.setArguments(bundle);
-        pegarFragment(fragmentDetails);
+    public void onClick(final Producto producto) {
+
+        productoController = new ProductoController();
+        productoController.getProductoById(producto.getId(), new ResultListener<Producto>() {
+            @Override
+            public void onFinish(Producto result) {
+
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("Producto", result);
+                FragmentDetails fragmentDetails = new FragmentDetails();
+                fragmentDetails.setArguments(bundle);
+                pegarFragment(fragmentDetails);
+            }
+        });
+
+
+
+
 
     }
 

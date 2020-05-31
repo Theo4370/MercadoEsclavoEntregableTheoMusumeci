@@ -5,6 +5,7 @@ import com.example.mercadoesclavoentregable.model.Producto;
 import com.example.mercadoesclavoentregable.model.ProductoContainer;
 import com.example.mercadoesclavoentregable.util.ResultListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ProductoController {
@@ -30,6 +31,15 @@ public class ProductoController {
             @Override
             public void onFinish(Producto result) {
                 resultListeneFromView.onFinish(result);
+            }
+        });
+    }
+
+    public void getDescripcionProducto(String id, final ResultListener<ArrayList<Producto>> resultListenerFromView){
+        productoDao.getDescripcionProducto(id, new ResultListener<ArrayList<Producto>>() {
+            @Override
+            public void onFinish(ArrayList<Producto> result) {
+                resultListenerFromView.onFinish(result);
             }
         });
     }

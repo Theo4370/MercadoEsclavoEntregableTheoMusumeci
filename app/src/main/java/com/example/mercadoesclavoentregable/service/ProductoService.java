@@ -3,6 +3,8 @@ package com.example.mercadoesclavoentregable.service;
 import com.example.mercadoesclavoentregable.model.Producto;
 import com.example.mercadoesclavoentregable.model.ProductoContainer;
 
+import java.util.ArrayList;
+
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
@@ -25,5 +27,10 @@ public interface ProductoService {
 
     @GET("items/{id}")
     Call<Producto> getProductoById(@Path("id") String id);
+
+
+    //No se por qué, pero este pedido devuelve un ArrayList de 1 elemento con el "producto" adentro
+    @GET("items/{id}/descriptions")
+    Call<ArrayList<Producto>> getDescripcionProducto(@Path("id") String id);
 
 }

@@ -7,29 +7,30 @@
     android:orientation="vertical"
     tools:context=".view.fragment.FragmentDetails">
 
+
+
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
-        android:elevation="10dp"
+        android:elevation="5dp"
         app:cardCornerRadius="20dp">
 
         <ImageView
             android:layout_width="match_parent"
-            android:layout_height="350dp"
+            android:layout_height="250dp"
             android:scaleType="centerCrop"
             android:src="@drawable/taladro"
             android:id="@+id/detailsProductoImagen"/>
 
     </androidx.cardview.widget.CardView>
 
-
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="Nombre del producto"
-        android:textSize="40dp"
+        android:textSize="30dp"
         android:id="@+id/detailsProductoTextView"/>
 
 
@@ -38,7 +39,9 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:text="Texto con la descripcion del producto en cuestion. "
-        android:textSize="30dp"
-        android:id="@+id/detailsProductoDescripción"/>
+        android:textSize="25dp"
+        android:id="@+id/detailsProductoDescripcion"/>
+
+
 
 </LinearLayout>

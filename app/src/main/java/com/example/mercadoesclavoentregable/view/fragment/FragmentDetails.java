@@ -12,13 +12,20 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.mercadoesclavoentregable.R;
+import com.example.mercadoesclavoentregable.controller.ProductoController;
 import com.example.mercadoesclavoentregable.model.Producto;
+import com.example.mercadoesclavoentregable.util.ResultListener;
+
+import java.util.ArrayList;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class FragmentDetails extends Fragment {
+
+    private ProductoController productoController;
+
 
     public FragmentDetails() {
         // Required empty public constructor
@@ -35,13 +42,22 @@ public class FragmentDetails extends Fragment {
 
         ImageView imageViewProducto = view.findViewById(R.id.detailsProductoImagen);
         TextView textViewProducto = view.findViewById(R.id.detailsProductoTextView);
-        TextView textViewDescripcion = view.findViewById(R.id.detailsProductoDescripción);
+        final TextView textViewDescripcion = view.findViewById(R.id.detailsProductoDescripcion);
+
+        productoController = new ProductoController();
+        productoController.getDescripcionProducto(producto.getId(), new ResultListener<ArrayList<Producto>>() {
+            @Override
+            public void onFinish(ArrayList<Producto> result) {
+                ArrayList<Producto> descripcion = result;
+                textViewDescripcion.setText(descripcion.get(0).getDescripcion());
+            }
+        });
 
         Glide.with(getContext())
-                .load(producto.getThumbnail())
+                .load(producto.getPictures().get(0).getSecureUrl())
                 .into(imageViewProducto);
         textViewProducto.setText(producto.getTitle());
-        textViewDescripcion.setText(producto.getPrice().toString());
+
 
 
         return view;

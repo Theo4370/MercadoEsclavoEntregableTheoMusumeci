@@ -6,7 +6,9 @@ import com.example.mercadoesclavoentregable.service.ProductoService;
 import com.example.mercadoesclavoentregable.util.ResultListener;
 
 import java.nio.file.Path;
+import java.util.ArrayList;
 
+import okhttp3.internal.http2.PushObserver;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -59,6 +61,28 @@ public abstract class ProductoDao extends RetrofitDao {
 
             @Override
             public void onFailure(Call<Producto> call, Throwable t) {
+                t.printStackTrace();
+            }
+        });
+    }
+
+
+    public void getDescripcionProducto(String id, final ResultListener<ArrayList<Producto>> resultListenerFromController) {
+        Call<ArrayList<Producto>> call = this.productoService.getDescripcionProducto(id);
+
+        call.enqueue(new Callback<ArrayList<Producto>>() {
+            @Override
+            public void onResponse(Call<ArrayList<Producto>> call, Response<ArrayList<Producto>> response) {
+                if (response.isSuccessful()) {
+                    ArrayList<Producto> producto = response.body();
+                    resultListenerFromController.onFinish(producto);
+                } else {
+                    response.errorBody();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<Producto>> call, Throwable t) {
                 t.printStackTrace();
             }
         });
