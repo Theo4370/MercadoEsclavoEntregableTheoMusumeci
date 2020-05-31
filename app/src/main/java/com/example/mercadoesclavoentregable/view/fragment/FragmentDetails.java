@@ -1,14 +1,13 @@
 package com.example.mercadoesclavoentregable.view.fragment;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
 import com.example.mercadoesclavoentregable.R;
@@ -24,6 +23,10 @@ import java.util.ArrayList;
  */
 public class FragmentDetails extends Fragment {
 
+    private ImageView imageViewProducto;
+    private TextView textViewProducto;
+    private TextView textViewDescripcion;
+    private Producto producto;
     private ProductoController productoController;
 
 
@@ -37,13 +40,46 @@ public class FragmentDetails extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_details, container, false);
 
+        producto = getProducto();
+        findViewById(view);
+        getAndSetDescripcionProducto(producto, textViewDescripcion);
+        setViews(producto);
+
+
+        return view;
+    }
+
+    /**
+     * Traigo el objeto producto que me provee el bundle traido de la main
+     * */
+    private Producto getProducto() {
         Bundle bundle = getArguments();
-        Producto producto = (Producto) bundle.getSerializable("Producto");
+        return (Producto) bundle.getSerializable("Producto");
+    }
 
-        ImageView imageViewProducto = view.findViewById(R.id.detailsProductoImagen);
-        TextView textViewProducto = view.findViewById(R.id.detailsProductoTextView);
-        final TextView textViewDescripcion = view.findViewById(R.id.detailsProductoDescripcion);
+    /**
+ * Se setean los valores de los views del fragment. LA DESCRIPCION LA SETEA EL getDescripcionProducto()
+ * */
+    private void setViews(Producto producto) {
+        Glide.with(getContext())
+                .load(producto.getPictures().get(0).getSecureUrl())
+                .into(imageViewProducto);
+        textViewProducto.setText(producto.getTitle());
+    }
 
+    /**
+     * Se hacen los find by id de los componentes del fragment
+     */
+    private void findViewById(View view) {
+        imageViewProducto = view.findViewById(R.id.detailsProductoImagen);
+        textViewProducto = view.findViewById(R.id.detailsProductoTextView);
+        textViewDescripcion = view.findViewById(R.id.detailsProductoDescripcion);
+    }
+
+    /**
+     * Se hace el pedido a internet de la descripcion del producto y se lo setea al textViewDescripcion
+     */
+    private void getAndSetDescripcionProducto(Producto producto, final TextView textViewDescripcion) {
         productoController = new ProductoController();
         productoController.getDescripcionProducto(producto.getId(), new ResultListener<ArrayList<Producto>>() {
             @Override
@@ -52,15 +88,6 @@ public class FragmentDetails extends Fragment {
                 textViewDescripcion.setText(descripcion.get(0).getDescripcion());
             }
         });
-
-        Glide.with(getContext())
-                .load(producto.getPictures().get(0).getSecureUrl())
-                .into(imageViewProducto);
-        textViewProducto.setText(producto.getTitle());
-
-
-
-        return view;
     }
 
 }

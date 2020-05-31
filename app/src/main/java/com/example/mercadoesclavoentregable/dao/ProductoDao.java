@@ -22,6 +22,8 @@ public abstract class ProductoDao extends RetrofitDao {
         productoService = super.retrofit.create(ProductoService.class);
     }
 
+
+
     public void getProductoPorSearch(String id, final ResultListener<ProductoContainer> resultListenerPorController) {
         Call<ProductoContainer> call = this.productoService.getProductoPorSearch(id);
 
@@ -65,7 +67,6 @@ public abstract class ProductoDao extends RetrofitDao {
             }
         });
     }
-
 
     public void getDescripcionProducto(String id, final ResultListener<ArrayList<Producto>> resultListenerFromController) {
         Call<ArrayList<Producto>> call = this.productoService.getDescripcionProducto(id);

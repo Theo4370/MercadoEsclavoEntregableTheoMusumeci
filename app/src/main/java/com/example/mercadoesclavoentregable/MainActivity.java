@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity implements FragmentListadoPr
         findViewById();
         navigationView();
         toolBar();
-        pegarProductosAlRecycler();
+        getAndSetProductosAlRecycler();
 
 
     }
@@ -62,10 +62,10 @@ public class MainActivity extends AppCompatActivity implements FragmentListadoPr
     /**
      * Metodo que recibe el pedido de internet y pega los productos al recycler
      */
-    private void pegarProductosAlRecycler() {
+    private void getAndSetProductosAlRecycler() {
         productoController = new ProductoController();
         fragmentListadoProductos = new FragmentListadoProductos();
-        productoController.getProductoPorSearch("Rx 570", new ResultListener<ProductoContainer>() {
+        productoController.getProductoPorSearch("Celular", new ResultListener<ProductoContainer>() {
             @Override
             public void onFinish(ProductoContainer result) {
 
@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements FragmentListadoPr
     }
 
     /**
-     * Configuracion de navigationView
+     * Configuracion de navigationView BOTONES
      */
     private void navigationView() {
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity implements FragmentListadoPr
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.menuInicio:
-                        pegarProductosAlRecycler();
+                        getAndSetProductosAlRecycler();
                         drawerLayout.closeDrawers();
                         break;
                     case R.id.menuPerfil:
@@ -126,6 +126,9 @@ public class MainActivity extends AppCompatActivity implements FragmentListadoPr
         fragmentTransaction.commit();
     }
 
+    /**
+     * Configuracion onClickProducto mostrado en el recycler principal
+     * */
     @Override
     public void onClick(final Producto producto) {
 
@@ -156,7 +159,7 @@ public class MainActivity extends AppCompatActivity implements FragmentListadoPr
     }
 
     /**
-     * Inflo el appBar (toolBar)
+     * Inflo el appBar (toolBar) y se configura el searchView
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
