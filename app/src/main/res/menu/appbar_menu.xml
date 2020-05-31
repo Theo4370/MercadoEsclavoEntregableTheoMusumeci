@@ -13,7 +13,7 @@
     <item
         android:icon="@drawable/ic_favorite_black_24dp"
         android:title="Favoritos"
-        app:showAsAction="always"
+        app:showAsAction="ifRoom"
         android:id="@+id/appBarFavoritosButton"/>
 
 

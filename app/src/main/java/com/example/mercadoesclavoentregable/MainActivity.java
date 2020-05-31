@@ -12,6 +12,7 @@ import androidx.fragment.app.FragmentTransaction;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.example.mercadoesclavoentregable.controller.ProductoController;
@@ -142,9 +143,6 @@ public class MainActivity extends AppCompatActivity implements FragmentListadoPr
         });
 
 
-
-
-
     }
 
     @Override
@@ -163,6 +161,38 @@ public class MainActivity extends AppCompatActivity implements FragmentListadoPr
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.appbar_menu, menu);
+
+        MenuItem menuItem = menu.findItem(R.id.appBarsearch);
+        SearchView searchView = (SearchView) menuItem.getActionView();
+        searchView.setQueryHint("Buscar producto");
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                productoController = new ProductoController();
+                fragmentListadoProductos = new FragmentListadoProductos();
+                productoController.getProductoPorSearch(query, new ResultListener<ProductoContainer>() {
+                    @Override
+                    public void onFinish(ProductoContainer result) {
+
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("productos", result);
+                        fragmentListadoProductos.setArguments(bundle);
+                        pegarFragment(fragmentListadoProductos);
+
+                    }
+                });
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+
+                return false;
+            }
+        });
+
+
         return true;
     }
 
