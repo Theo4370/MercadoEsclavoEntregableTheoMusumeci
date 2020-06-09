@@ -22,12 +22,14 @@ import com.example.mercadoesclavoentregable.util.ResultListener;
 import com.example.mercadoesclavoentregable.view.fragment.AboutUsFragment;
 import com.example.mercadoesclavoentregable.view.fragment.FragmentDetails;
 import com.example.mercadoesclavoentregable.view.fragment.FragmentListadoProductos;
+import com.example.mercadoesclavoentregable.view.fragment.FragmentLogIn;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements FragmentListadoProductos.FragmentListadoProductosListener {
 
+    public static final String PRODUCTO = "Producto";
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
     private FragmentListadoProductos fragmentListadoProductos;
@@ -92,7 +94,10 @@ public class MainActivity extends AppCompatActivity implements FragmentListadoPr
                         drawerLayout.closeDrawers();
                         break;
                     case R.id.menuPerfil:
-                        Toast.makeText(MainActivity.this, "Perfil, en construcción", Toast.LENGTH_LONG).show();
+                        FragmentLogIn fragmentLogIn = new FragmentLogIn();
+                        pegarFragment(fragmentLogIn);
+                        drawerLayout.closeDrawers();
+
                         break;
                     case R.id.menuAboutUs:
                         AboutUsFragment aboutUsFragment = new AboutUsFragment();
@@ -128,23 +133,15 @@ public class MainActivity extends AppCompatActivity implements FragmentListadoPr
 
     /**
      * Configuracion onClickProducto mostrado en el recycler principal
-     * */
+     */
     @Override
     public void onClick(final Producto producto) {
 
-        productoController = new ProductoController();
-        productoController.getProductoById(producto.getId(), new ResultListener<Producto>() {
-            @Override
-            public void onFinish(Producto result) {
-
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("Producto", result);
-                FragmentDetails fragmentDetails = new FragmentDetails();
-                fragmentDetails.setArguments(bundle);
-                pegarFragment(fragmentDetails);
-            }
-        });
-
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(PRODUCTO, producto);
+        FragmentDetails fragmentDetails = new FragmentDetails();
+        fragmentDetails.setArguments(bundle);
+        pegarFragment(fragmentDetails);
 
     }
 
@@ -212,4 +209,5 @@ public class MainActivity extends AppCompatActivity implements FragmentListadoPr
         }
         return super.onOptionsItemSelected(item);
     }
+
 }

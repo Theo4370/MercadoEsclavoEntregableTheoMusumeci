@@ -23,6 +23,7 @@ import java.util.List;
 public class FragmentListadoProductos extends Fragment implements ProductoAdapter.ProductoAdapterListener {
 
     private FragmentListadoProductosListener fragmentListadoProductosListener;
+    private ProductoAdapter productoAdapter;
     private RecyclerView recyclerViewProductos;
 
     public FragmentListadoProductos() {
@@ -47,7 +48,7 @@ public class FragmentListadoProductos extends Fragment implements ProductoAdapte
 
 
 
-        ProductoAdapter productoAdapter = new ProductoAdapter(productoList, this);
+        productoAdapter = new ProductoAdapter(productoList, this);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
 
         recyclerViewProductos.setLayoutManager(linearLayoutManager);

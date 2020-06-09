@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".view.fragment.FragmentLogIn"
+    android:orientation="vertical"
+    android:id="@+id/constraintLayout"
+    android:layout_gravity="center">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Crear Usuario"
+        android:gravity="center"
+        android:textSize="30dp"
+        android:id="@+id/TextoRegister"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+
+
+<com.google.android.material.textfield.TextInputLayout
+    android:layout_width="200dp"
+    app:layout_constraintLeft_toLeftOf="parent"
+    app:layout_constraintRight_toRightOf="parent"
+    android:layout_marginTop="40dp"
+    android:layout_height="wrap_content"
+    app:layout_constraintTop_toBottomOf="@+id/TextoRegister"
+    android:id="@+id/editTextMail">
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Mail">
+    </EditText>
+</com.google.android.material.textfield.TextInputLayout>
+
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/editTextMail"
+        android:id="@+id/editTextContraseña">
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Contraseña">
+
+    </EditText>
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/editTextApodo"
+        app:layout_constraintTop_toBottomOf="@id/editTextContraseña">
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Apodo">
+
+        </EditText>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Registrarse"
+        android:layout_gravity="center"
+        android:id="@+id/botonRegister"
+        app:layout_constraintTop_toBottomOf="@id/editTextApodo"/>
+
+    <com.google.android.gms.common.SignInButton
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+
+        android:id="@+id/botonRegisterGoogle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        app:layout_constraintTop_toBottomOf="@id/botonRegister"/>
+
+
+    <Button
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Log out"
+        android:layout_gravity="center"
+        android:id="@+id/botonLogOut"
+        app:layout_constraintTop_toBottomOf="@id/botonRegisterGoogle"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
