@@ -23,11 +23,14 @@ import com.example.mercadoesclavoentregable.view.fragment.AboutUsFragment;
 import com.example.mercadoesclavoentregable.view.fragment.FragmentDetails;
 import com.example.mercadoesclavoentregable.view.fragment.FragmentListadoProductos;
 import com.example.mercadoesclavoentregable.view.fragment.FragmentLogIn;
+import com.example.mercadoesclavoentregable.view.fragment.FragmentRegister;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements FragmentListadoProductos.FragmentListadoProductosListener {
+public class MainActivity extends AppCompatActivity implements FragmentListadoProductos.FragmentListadoProductosListener, FragmentLogIn.FragmentLogInListener {
 
     public static final String PRODUCTO = "Producto";
     private DrawerLayout drawerLayout;
@@ -36,11 +39,17 @@ public class MainActivity extends AppCompatActivity implements FragmentListadoPr
     private ProductoController productoController;
     private Toolbar toolbar;
 
+    private FirebaseAuth mAuth;
+    private FirebaseUser usuarioLogueado;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mAuth = FirebaseAuth.getInstance();
+        usuarioLogueado = mAuth.getCurrentUser();
 
         findViewById();
         navigationView();
@@ -210,4 +219,8 @@ public class MainActivity extends AppCompatActivity implements FragmentListadoPr
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onClickRegistrar() {
+        pegarFragment(new FragmentRegister());
+    }
 }
