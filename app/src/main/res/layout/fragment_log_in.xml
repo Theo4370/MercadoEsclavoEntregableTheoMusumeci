@@ -128,7 +128,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="5dp"
-            android:text="No tenes cuenta?"
+            android:text="O bien podes"
             android:textSize="20dp"/>
 
         <com.google.android.material.textview.MaterialTextView
@@ -136,7 +136,7 @@
             android:layout_width="wrap_content"
             android:textSize="20dp"
             android:layout_height="wrap_content"
-            android:text="Registrate"
+            android:text="crear una cuenta"
             android:textColor="@color/colorPrimary" />
 
     </LinearLayout>

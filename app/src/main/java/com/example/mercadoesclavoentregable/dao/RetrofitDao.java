@@ -6,9 +6,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public abstract class RetrofitDao {
 
 
-
-//    private static final String URL_BASE = "https://api.mercadolibre.com/sites/MLA/";
-
     private static final String URL_BASE = "https://api.mercadolibre.com/";
     protected Retrofit retrofit;
 
