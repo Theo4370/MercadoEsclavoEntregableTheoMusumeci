@@ -36,7 +36,7 @@ import java.util.concurrent.Executor;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FragmentLogIn extends Fragment implements Executor, View.OnClickListener {
+public class FragmentLogIn extends Fragment implements View.OnClickListener {
 
     private SignInButton botonRegisterGoogle;
     private Button botonLogOut;
@@ -66,7 +66,7 @@ public class FragmentLogIn extends Fragment implements Executor, View.OnClickLis
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+
         View view = inflater.inflate(R.layout.fragment_log_in, container, false);
 
         mAuth = FirebaseAuth.getInstance();
@@ -81,37 +81,16 @@ public class FragmentLogIn extends Fragment implements Executor, View.OnClickLis
         textoRegistrarse.setOnClickListener(this);
 
 
-        //Este boton va a ir en otro lado
-        botonLogOut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                client.signOut().addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-
-
-                        Toast.makeText(getContext(), "LogOutOnSuccess", Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
-        });
-
-
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+        //LO MUEVO AL BOTON SINGINGOOGLE PARA PROBAR
+        /*GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .requestProfile()
                 .build();
 
-        client = GoogleSignIn.getClient(getContext(), gso);
+        client = GoogleSignIn.getClient(getActivity(), gso);*/
 
         return view;
     }
-
-
-
-
-
-
 
 
     private void findViewById(View view) {
@@ -145,8 +124,10 @@ public class FragmentLogIn extends Fragment implements Executor, View.OnClickLis
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
-            Toast.makeText(getContext(), "Login correcto", Toast.LENGTH_SHORT).show();
-            //updateUIGoogle(account);
+            Toast.makeText(getContext(), "Login correcto con Google", Toast.LENGTH_SHORT).show();
+
+
+            updateUIGoogle(account);
         } catch (ApiException e) {
             Log.w("GOOGLE", "signInResult:failed code=" + e.getStatusCode());
             Toast.makeText(getContext(), "Error inesperado", Toast.LENGTH_SHORT).show();
@@ -158,11 +139,11 @@ public class FragmentLogIn extends Fragment implements Executor, View.OnClickLis
     @Override
     public void onStart() {
         super.onStart();
-        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(getContext());
-        updateUIGoogle(account);
+        //GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(getContext());
+        //updateUIGoogle(account);
 
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        updateUIFirebase(currentUser);
+        //FirebaseUser currentUser = mAuth.getCurrentUser();
+        //updateUIFirebase(currentUser);
     }
 
     public void updateUIGoogle(GoogleSignInAccount account) {
@@ -181,42 +162,21 @@ public class FragmentLogIn extends Fragment implements Executor, View.OnClickLis
         }
     }
 
-    public void crearUsuarioFirebase(String mail, String password) {
-
-        mAuth.createUserWithEmailAndPassword(mail, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            updateUIFirebase(user);
-
-                        } else {
-
-                            Toast.makeText(getContext(), "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
-                            updateUIFirebase(null);
-                        }
-
-                        // ...
-                    }
-                });
 
 
-    }
 
+/*
     private void singInFirebase(String mail, String password) {
 
 
         mAuth.signInWithEmailAndPassword(mail, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            Toast.makeText(getContext(), "LogIn exitoso", Toast.LENGTH_SHORT).show();
+
                             FirebaseUser user = mAuth.getCurrentUser();
-                           // updateUIFirebase(user);
+                             updateUIFirebase(user);
                         } else {
                             Toast.makeText(getContext(), "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
@@ -227,34 +187,44 @@ public class FragmentLogIn extends Fragment implements Executor, View.OnClickLis
                 });
 
     }
+*/
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
 
             case R.id.botonLogIn:
-                singInFirebase(mail.getText().toString(), password.getText().toString());
+                fragmentLogInListener.onClickSingInFirebase(mail.getText().toString(), password.getText().toString());
 
+                break;
             case R.id.botonRegisterGoogle:
+
+                GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                        .requestEmail()
+                        .requestProfile()
+                        .build();
+
+                client = GoogleSignIn.getClient(getActivity(), gso);
+
+
                 Intent signInIntent = client.getSignInIntent();
                 startActivityForResult(signInIntent, RC_SIGN_IN_GOOGLE);
 
+                break;
+
             case R.id.textViewRegistrarse:
-                fragmentLogInListener.onClickRegistrar();
+                fragmentLogInListener.onClickBotonCrearCuenta();
 
-
+                break;
         }
     }
 
     public interface FragmentLogInListener {
-        public void onClickRegistrar();
+        public void onClickBotonCrearCuenta();
+
+        public void onClickSingInFirebase(String mail, String password);
 
     }
 
 
-    //El fragment tiene que impletmentar Executor para que funcione el crearUsuarioFirebase
-    @Override
-    public void execute(Runnable command) {
-
-    }
 }

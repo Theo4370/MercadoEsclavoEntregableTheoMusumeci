@@ -3,6 +3,7 @@ package com.example.mercadoesclavoentregable.model;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Producto implements Serializable {
@@ -19,24 +20,75 @@ public class Producto implements Serializable {
     private String thumbnail;
 
     private String condition;
+
+    //DESCRIPCION DEL PRODUCTO
     @SerializedName("plain_text")
     private String plainText;
+
+
+    //PRUEBA ATRIBUTOS NUEVOS
+    @SerializedName("seller_address")
+    private Producto sellerAdress;
+    @SerializedName("city")
+    private Producto city;
+    @SerializedName("name")
+    private String nombreCity;
 
 
     public Producto() {
 
     }
 
-    public Producto(String id, String title, Double price, String fotoProducto, String condition, String plainText, List<Producto> pictures, String secureUrl) {
+    public Producto(String id, String title, Double price, String secureUrl, List<Producto> pictures, String thumbnail, String condition, String plainText, Producto sellerAdress, Producto city, String nombreCity) {
         this.id = id;
         this.title = title;
         this.price = price;
-        this.thumbnail = fotoProducto;
-        this.condition = condition;
-        this.plainText = plainText;
         this.secureUrl = secureUrl;
         this.pictures = pictures;
+        this.thumbnail = thumbnail;
+        this.condition = condition;
+        this.plainText = plainText;
+        this.sellerAdress = sellerAdress;
+        this.city = city;
+        this.nombreCity = nombreCity;
     }
+
+    public Producto getCity() {
+        return city;
+    }
+
+    public void setCity(Producto city) {
+        this.city = city;
+    }
+
+    public String getNombreCity() {
+        return nombreCity;
+    }
+
+    public void setNombreCity(String nombreCity) {
+        this.nombreCity = nombreCity;
+    }
+
+
+
+
+
+    public String getPlainText() {
+        return plainText;
+    }
+
+    public void setPlainText(String plainText) {
+        this.plainText = plainText;
+    }
+
+    public Producto getSellerAdress() {
+        return sellerAdress;
+    }
+
+    public void setSellerAdress(Producto sellerAdress) {
+        this.sellerAdress = sellerAdress;
+    }
+
 
     public String getSecureUrl() {
         return secureUrl;

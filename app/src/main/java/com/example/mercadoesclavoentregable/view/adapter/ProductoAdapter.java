@@ -26,7 +26,6 @@ public class ProductoAdapter extends RecyclerView.Adapter<ProductoAdapter.Produc
     private ProductoController productoController;
 
 
-
     public ProductoAdapter(List<Producto> listaDeProductos, ProductoAdapterListener listener) {
         this.listaDeProductos = listaDeProductos;
         this.productoAdapterListener = listener;
@@ -65,6 +64,7 @@ public class ProductoAdapter extends RecyclerView.Adapter<ProductoAdapter.Produc
         private TextView nombreProducto;
         private TextView precioProducto;
         private ImageView fotoProducto;
+        private TextView ubicacionProducto;
 
 
         public ProductoViewHolder(@NonNull View itemView) {
@@ -73,6 +73,7 @@ public class ProductoAdapter extends RecyclerView.Adapter<ProductoAdapter.Produc
             nombreProducto = itemView.findViewById(R.id.celdaArticuloTextViewArticulo);
             precioProducto = itemView.findViewById(R.id.celdaArticuloTextViewPrecio);
             fotoProducto = itemView.findViewById(R.id.celdaArticuloImageViewFoto);
+            ubicacionProducto = itemView.findViewById(R.id.celdaArticuloTextViewUbicacion);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -87,6 +88,9 @@ public class ProductoAdapter extends RecyclerView.Adapter<ProductoAdapter.Produc
         public void onBind(Producto unProducto) {
 
 
+            //FALTA AGREGAR UBICACIONNNNNNN
+
+
             //Hago un pedido nuevo de la foto de cada producto
             productoController = new ProductoController();
             productoController.getProductoById(unProducto.getId(), new ResultListener<Producto>() {
@@ -96,10 +100,12 @@ public class ProductoAdapter extends RecyclerView.Adapter<ProductoAdapter.Produc
                     Glide.with(fotoProducto.getContext())
                             .load(producto.getPictures().get(0).getSecureUrl())
                             .into(fotoProducto);
+
+
                 }
             });
 
-
+            ubicacionProducto.setText(unProducto.getSellerAdress().getCity().getNombreCity());
             Integer precioInteger = unProducto.getPrice().intValue();
             precioProducto.setText(precioInteger.toString());
             nombreProducto.setText(unProducto.getTitle());

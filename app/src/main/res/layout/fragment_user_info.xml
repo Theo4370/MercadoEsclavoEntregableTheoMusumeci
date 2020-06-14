@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".view.fragment.FragmentLogIn"
+    android:orientation="vertical"
+    android:id="@+id/constraintLayout"
+    android:layout_gravity="center">
+
+    <com.google.android.material.textview.MaterialTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Complete los siguientes datos para finalizar"
+        android:gravity="center"
+        android:textSize="20dp"
+        android:layout_marginTop="30dp"
+        android:id="@+id/textoUserInfo"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="250dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="40dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/textoUserInfo"
+        android:id="@+id/materialTextNombreCompleto">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Nombre completo"
+            android:id="@+id/editTextNombreCompleto">
+        </EditText>
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_width="250dp"
+        android:layout_marginTop="20dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/materialTextNombreCompleto"
+        android:id="@+id/materialTextApodo">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Apodo"
+            android:id="@+id/editTextApodo"
+
+            >
+
+        </EditText>
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="20dp"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/materialTextEdad"
+        app:layout_constraintTop_toBottomOf="@id/materialTextApodo">
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Edad"
+            android:id="@+id/editTextEdad">
+
+        </EditText>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="20dp"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/materialTextCiudad"
+        app:layout_constraintTop_toBottomOf="@id/materialTextEdad">
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Ciudad"
+            android:id="@+id/editTextCiudad">
+
+        </EditText>
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <Button
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:text="Finalizar"
+        android:textColor="#F3F3F3"
+        android:background="#4837AA"
+
+        android:layout_marginTop="20dp"
+        android:layout_gravity="center"
+        android:id="@+id/botonFirebaseFirestore"
+        app:layout_constraintTop_toBottomOf="@id/materialTextCiudad"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -58,6 +58,7 @@ public class FragmentDetails extends Fragment {
 
     /**
      * Hace el pedido a internet del producto por ID, pido la foto del producto y la seteo.
+     * POR AHORA HAGO EL PEDIDO DE NUEVO (YA LA TENGO DEL ONBIND DEL ADAPTER, PODRIA TRAERLA DE AHI) PARA LUEGO AGREGAR SLIDEVIEW.
      * */
     private void getAndSetFotoProducto(Producto producto, final ImageView imageViewProducto) {
         productoController = new ProductoController();

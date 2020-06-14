@@ -1,5 +1,6 @@
 package com.example.mercadoesclavoentregable.view.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -23,30 +24,37 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.concurrent.Executor;
 
 
-public class FragmentRegister extends Fragment implements Executor {
+public class FragmentRegister extends Fragment {
 
 
     private EditText mail;
     private EditText password;
-    private EditText apodo;
+
     private Button botonRegistrarFirebase;
 
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
+
+    private FragmentRegisterListener fragmentRegisterListener;
 
 
     public FragmentRegister() {
         // Required empty public constructor
     }
 
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        this.fragmentRegisterListener = (FragmentRegisterListener) context;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_register, container, false);
-        mAuth = FirebaseAuth.getInstance();
 
+        mAuth = FirebaseAuth.getInstance();
 
         db = FirebaseFirestore.getInstance();
 
@@ -57,7 +65,8 @@ public class FragmentRegister extends Fragment implements Executor {
             @Override
             public void onClick(View v) {
 
-                crearUsuarioFirebase(mail.getText().toString(), password.getText().toString());
+                fragmentRegisterListener.onClickBotonFinalizarRegister(mail.getText().toString(), password.getText().toString());
+
 
 
             }
@@ -70,13 +79,15 @@ public class FragmentRegister extends Fragment implements Executor {
         mail = view.findViewById(R.id.editTextMailRegister);
         password = view.findViewById(R.id.editTextContraseñaRegister);
         botonRegistrarFirebase = view.findViewById(R.id.botonRegisterFirebase);
-        apodo = view.findViewById(R.id.editTextApodo);
+
     }
 
-    public void crearUsuarioFirebase(String mail, String password) {
+    /*public void crearUsuarioFirebase(String mail, String password) {
+
+        mAuth = FirebaseAuth.getInstance();
 
         mAuth.createUserWithEmailAndPassword(mail, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
@@ -84,31 +95,32 @@ public class FragmentRegister extends Fragment implements Executor {
                                     Toast.LENGTH_SHORT).show();
 
                             FirebaseUser user = mAuth.getCurrentUser();
-                            // updateUIFirebase(user);
+
+
+                             updateUIFirebase(user);
 
                         } else {
 
                             Toast.makeText(getContext(), "Algo fallo con la autenticacion",
                                     Toast.LENGTH_SHORT).show();
-                            updateUIFirebase(null);
+                           // updateUIFirebase(null);
                         }
 
-                        // ...
+
                     }
                 });
 
 
-    }
 
-    private void updateUIFirebase(FirebaseUser currentUser) {
-        if (currentUser != null) {
-            //Pasar a fragment con datos de cuenta
-            Toast.makeText(getContext(), "Se logueo usuario de Firebase", Toast.LENGTH_SHORT).show();
-        }
-    }
+    }*/
 
-    @Override
-    public void execute(Runnable command) {
+
+
+
+
+    public interface FragmentRegisterListener {
+        public void onClickBotonFinalizarRegister(String mail, String password);
+
 
     }
 }
