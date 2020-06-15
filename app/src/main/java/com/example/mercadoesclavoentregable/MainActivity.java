@@ -1,6 +1,7 @@
 package com.example.mercadoesclavoentregable;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -9,7 +10,9 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.SearchView;
@@ -28,14 +31,21 @@ import com.example.mercadoesclavoentregable.view.fragment.FragmentLogIn;
 import com.example.mercadoesclavoentregable.view.fragment.FragmentMiCuenta;
 import com.example.mercadoesclavoentregable.view.fragment.FragmentRegister;
 import com.example.mercadoesclavoentregable.view.fragment.FragmentUserInfo;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -56,6 +66,8 @@ public class MainActivity extends AppCompatActivity implements FragmentListadoPr
     private FirebaseAuth mAuth;
     private FirebaseUser firebaseUser;
     private FirebaseFirestore db;
+    private GoogleSignInClient client;
+    public static final int RC_SIGN_IN_GOOGLE = 1;
 
 
     @Override
@@ -108,7 +120,7 @@ public class MainActivity extends AppCompatActivity implements FragmentListadoPr
     private void getAndSetProductosAlRecycler() {
         productoController = new ProductoController();
         fragmentListadoProductos = new FragmentListadoProductos();
-        productoController.getProductoPorSearch("Vino", new ResultListener<ProductoContainer>() {
+        productoController.getProductoPorSearch("Planta", new ResultListener<ProductoContainer>() {
             @Override
             public void onFinish(ProductoContainer result) {
 
@@ -139,7 +151,7 @@ public class MainActivity extends AppCompatActivity implements FragmentListadoPr
                             /*FragmentMiCuenta fragmentMiCuenta = new FragmentMiCuenta();
                             pegarFragment(fragmentMiCuenta);
                             */
-                            pegarFragmentMiCuentaConUserInfo();
+                            getAndSetFragmentMiCuentaConUserInfo();
 
                         } else {
                             FragmentLogIn fragmentLogIn = new FragmentLogIn();
@@ -295,7 +307,7 @@ public class MainActivity extends AppCompatActivity implements FragmentListadoPr
 
             Toast.makeText(MainActivity.this, "Se logueo usuario de Firebase", Toast.LENGTH_SHORT).show();
 
-            pegarFragmentMiCuentaConUserInfo();
+            getAndSetFragmentMiCuentaConUserInfo();
 
         } else {
 
@@ -323,37 +335,10 @@ public class MainActivity extends AppCompatActivity implements FragmentListadoPr
 
         firebaseUser = mAuth.getCurrentUser();
 
-        getUserInfoDesdeFirestore(firebaseUser);
-
+//        getUserInfoDesdeFirestore(firebaseUser);
+        updateUIFirebase(firebaseUser);
         //Pasar a fragment mi cuenta
         //updateUI
-
-
-    }
-
-    public void getUserInfoDesdeFirestore(FirebaseUser firebaseUser) {
-
-        db.collection(USERINFO)
-                .document(firebaseUser.getUid())
-                .get()
-                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                    @Override
-                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        UserInfo userInfo = documentSnapshot.toObject(UserInfo.class);
-
-                        String apodo = userInfo.getApodo();
-                        nombreUsuarioNavigationView = findViewById(R.id.navigationHeadNombreUsuario);
-                        nombreUsuarioNavigationView.setText(apodo);
-
-                        pegarFragmentMiCuentaConUserInfo();
-
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(MainActivity.this, "Algo salio mal con el import", Toast.LENGTH_SHORT).show();
-            }
-        });
 
 
     }
@@ -402,15 +387,16 @@ public class MainActivity extends AppCompatActivity implements FragmentListadoPr
         pegarFragment(fragmentLogIn);
         drawerLayout.closeDrawers();
 
+        nombreUsuarioNavigationView.setText("MercadoEsclavo");
+
 
     }
 
 
-    public void pegarFragmentMiCuentaConUserInfo() {
-
+    public void getAndSetFragmentMiCuentaConUserInfo() {
 
         db.collection(USERINFO)
-                .document(firebaseUser.getUid())
+                .document(mAuth.getCurrentUser().getUid())
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
@@ -418,15 +404,22 @@ public class MainActivity extends AppCompatActivity implements FragmentListadoPr
 
                         UserInfo userInfo = documentSnapshot.toObject(UserInfo.class);
 
-
-                        Bundle bundle = new Bundle();
-                        bundle.putSerializable(USERINFO, userInfo);
-
-                        FragmentMiCuenta fragmentMiCuenta = new FragmentMiCuenta();
-                        fragmentMiCuenta.setArguments(bundle);
-                        pegarFragment(fragmentMiCuenta);
+                        if (userInfo != null) {
+                            String apodo = userInfo.getApodo();
+                            nombreUsuarioNavigationView = findViewById(R.id.navigationHeadNombreUsuario);
+                            nombreUsuarioNavigationView.setText(apodo);
 
 
+                            Bundle bundle = new Bundle();
+                            bundle.putSerializable(USERINFO, userInfo);
+
+                            FragmentMiCuenta fragmentMiCuenta = new FragmentMiCuenta();
+                            fragmentMiCuenta.setArguments(bundle);
+                            pegarFragment(fragmentMiCuenta);
+                        } else {
+                            Toast.makeText(MainActivity.this, "Algo salio mal al cargar tus datos", Toast.LENGTH_SHORT).show();
+
+                        }
                     }
                 }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -437,5 +430,104 @@ public class MainActivity extends AppCompatActivity implements FragmentListadoPr
 
 
     }
+
+
+    //Configuracion google
+
+    @Override
+    public void onClickSingInGoogle() {
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .requestProfile()
+                .build();
+
+        client = GoogleSignIn.getClient(MainActivity.this, gso);
+
+
+        Intent signInIntent = client.getSignInIntent();
+        startActivityForResult(signInIntent, RC_SIGN_IN_GOOGLE);
+
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        switch (requestCode) {
+            case RC_SIGN_IN_GOOGLE:
+
+                Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+
+                try {
+
+                    GoogleSignInAccount account = task.getResult(ApiException.class);
+                    Log.d("GOOGLEFB", "firebaseAuthWithGoogle:" + account.getId());
+                    firebaseAuthWithGoogle(account.getIdToken());
+
+                    //updateUIGoogle(account);
+                } catch (ApiException e) {
+                    Log.w("GOOGLE", "signInResult:failed code=" + e.getStatusCode());
+                    Toast.makeText(MainActivity.this, "Error inesperado", Toast.LENGTH_SHORT).show();
+                    updateUIGoogle(null);
+                }
+
+
+                break;
+        }
+
+    }
+
+
+    private void firebaseAuthWithGoogle(String idToken) {
+        AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
+        mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(MainActivity.this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+
+                            firebaseUser = mAuth.getCurrentUser();
+
+                            GoogleSignInAccount googleAccount = GoogleSignIn.getLastSignedInAccount(MainActivity.this);
+
+
+                            UserInfo userInfo = new UserInfo(googleAccount.getDisplayName(), googleAccount.getFamilyName(), googleAccount.getGivenName(), googleAccount.getEmail());
+
+                            db.collection(USERINFO)
+                                    .document(firebaseUser.getUid())
+                                    .set(userInfo)
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            Toast.makeText(MainActivity.this, "Todo joya", Toast.LENGTH_SHORT).show();
+                                            getAndSetFragmentMiCuentaConUserInfo();
+
+                                        }
+                                    });
+
+                            updateUIGoogle(firebaseUser);
+                        } else {
+                            Toast.makeText(MainActivity.this, "Error inesperado de google", Toast.LENGTH_SHORT).show();
+                            // If sign in fails, display a message to the user.
+                            //Log.w("Google", "signInWithCredential:failure", task.getException());
+                            // Snackbar.make(mBinding.mainLayout, "Authentication Failed.", Snackbar.LENGTH_SHORT).show();
+                            //updateUI(null);
+                        }
+
+                        // ...
+                    }
+                });
+    }
+
+    public void updateUIGoogle(FirebaseUser account) {
+        if (account != null) {
+            //Pasar a fragment con datos de cuenta
+            Toast.makeText(MainActivity.this, "Se logueo usuario de google", Toast.LENGTH_SHORT).show();
+
+        }
+
+    }
+
 
 }

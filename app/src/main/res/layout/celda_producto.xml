@@ -19,7 +19,7 @@
             android:id="@+id/celdaArticuloImageViewFoto"
             android:layout_width="110dp"
             android:layout_height="110dp"
-            android:src="@drawable/renault12"
+            android:src="@drawable/me1"
             android:scaleType="centerCrop"
             android:layout_weight="1"/>
 

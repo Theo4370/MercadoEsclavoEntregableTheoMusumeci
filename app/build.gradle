@@ -41,6 +41,7 @@ dependencies {
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'com.github.bumptech.glide:glide:3.7.0'
 
+    //Librerias de google
     implementation 'com.google.android.gms:play-services-auth:18.0.0'
 
     //Librerias de retrofit

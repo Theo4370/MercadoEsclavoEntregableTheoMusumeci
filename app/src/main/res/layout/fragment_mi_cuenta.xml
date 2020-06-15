@@ -1,61 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".view.fragment.FragmentLogIn"
-    android:orientation="vertical"
-    android:id="@+id/constraintLayout"
-    android:layout_gravity="center">
+
+    android:layout_gravity="center"
+    tools:context=".view.fragment.FragmentLogIn">
 
     <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/textoDatosCuenta"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Datos de usuario"
-        android:gravity="center"
-        android:textSize="20dp"
         android:layout_marginTop="30dp"
-        android:id="@+id/textoDatosCuenta"
-        app:layout_constraintTop_toTopOf="parent"
-        />
-
-
+        android:gravity="center"
+        android:text="Datos de usuario"
+        android:textColor="#000"
+        android:textSize="25dp"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
     <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/materialTextNombreCompleto"
         android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginTop="40dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/textoDatosCuenta"
-        android:id="@+id/materialTextNombreCompleto">
+        app:layout_constraintTop_toBottomOf="@+id/textoDatosCuenta">
 
         <TextView
+            android:id="@+id/textViewNombreCompleto"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Nombre completo"
-            android:id="@+id/textViewNombreCompleto">
-        </TextView>
+            android:textSize="20dp"></TextView>
     </com.google.android.material.textfield.TextInputLayout>
 
 
 
     <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/materialTextApodo"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:layout_width="250dp"
-        android:layout_marginTop="20dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/materialTextNombreCompleto"
-        android:id="@+id/materialTextApodo">
+        app:layout_constraintTop_toBottomOf="@id/materialTextNombreCompleto">
 
         <TextView
+            android:id="@+id/textViewApodo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Apodo"
-            android:id="@+id/textViewApodo"
+            android:textSize="20dp"
 
             >
 
@@ -64,52 +63,56 @@
 
 
     <com.google.android.material.textfield.TextInputLayout
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginTop="20dp"
+        android:id="@+id/materialTextEdad"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:id="@+id/materialTextEdad"
+        android:layout_marginTop="20dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/materialTextApodo">
+
         <TextView
+            android:id="@+id/textViewEdad"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Edad"
-            android:id="@+id/textViewEdad">
+            android:textSize="20dp">
 
         </TextView>
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginTop="20dp"
+        android:id="@+id/materialTextCiudad"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:id="@+id/materialTextCiudad"
+        android:layout_marginTop="20dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/materialTextEdad">
+
         <TextView
+            android:id="@+id/textViewCiudad"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Ciudad"
-            android:id="@+id/textViewCiudad">
+            android:textSize="20dp">
 
         </TextView>
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginTop="20dp"
+        android:id="@+id/botonLogOut"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+
+        android:background="#4837AA"
+        android:text="Log out"
 
         android:textColor="#F3F3F3"
-        android:background="#4837AA"
-
-        android:text="Log out"
-        android:layout_gravity="center"
-        android:id="@+id/botonLogOut"
-        app:layout_constraintTop_toBottomOf="@id/materialTextCiudad"/>
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/materialTextCiudad" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

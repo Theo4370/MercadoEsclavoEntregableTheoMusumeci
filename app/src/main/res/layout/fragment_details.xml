@@ -34,8 +34,7 @@
                     android:id="@+id/detailsProductoImagen"
                     android:layout_width="match_parent"
                     android:layout_height="250dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/taladro" />
+                    android:scaleType="centerCrop" />
 
             </androidx.cardview.widget.CardView>
 
