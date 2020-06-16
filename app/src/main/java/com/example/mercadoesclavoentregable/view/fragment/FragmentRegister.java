@@ -82,41 +82,6 @@ public class FragmentRegister extends Fragment {
 
     }
 
-    /*public void crearUsuarioFirebase(String mail, String password) {
-
-        mAuth = FirebaseAuth.getInstance();
-
-        mAuth.createUserWithEmailAndPassword(mail, password)
-                .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            Toast.makeText(getContext(), "Usuario creado con exito",
-                                    Toast.LENGTH_SHORT).show();
-
-                            FirebaseUser user = mAuth.getCurrentUser();
-
-
-                             updateUIFirebase(user);
-
-                        } else {
-
-                            Toast.makeText(getContext(), "Algo fallo con la autenticacion",
-                                    Toast.LENGTH_SHORT).show();
-                           // updateUIFirebase(null);
-                        }
-
-
-                    }
-                });
-
-
-
-    }*/
-
-
-
-
 
     public interface FragmentRegisterListener {
         public void onClickBotonFinalizarRegister(String mail, String password);

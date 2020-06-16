@@ -109,22 +109,8 @@ public class FragmentLogIn extends Fragment implements View.OnClickListener {
 
                 break;
             case R.id.botonRegisterGoogle:
-
-
                 fragmentLogInListener.onClickSingInGoogle();
 
-                /*GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                        .requestIdToken(getString(R.string.default_web_client_id))
-                        .requestEmail()
-                        .requestProfile()
-                        .build();
-
-                client = GoogleSignIn.getClient(getActivity(), gso);
-
-
-                Intent signInIntent = client.getSignInIntent();
-                startActivityForResult(signInIntent, RC_SIGN_IN_GOOGLE);
-*/
                 break;
 
             case R.id.textViewRegistrarse:
@@ -135,65 +121,6 @@ public class FragmentLogIn extends Fragment implements View.OnClickListener {
     }
 
 
-  /*  @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        switch (resultCode) {
-            case RC_SIGN_IN_GOOGLE:
-
-                Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-                handleSignInResult(task);
-
-                break;
-        }
-
-
-    }
-*/
- /*   private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
-        try {
-*//*
-            GoogleSignInAccount account = completedTask.getResult(ApiException.class);
-            Toast.makeText(getContext(), "Login correcto con Google", Toast.LENGTH_SHORT).show();
-*//*
-            GoogleSignInAccount account = completedTask.getResult(ApiException.class);
-            Log.d("GOOGLEFB", "firebaseAuthWithGoogle:" + account.getId());
-            firebaseAuthWithGoogle(account.getIdToken());
-
-            //updateUIGoogle(account);
-        } catch (ApiException e) {
-            Log.w("GOOGLE", "signInResult:failed code=" + e.getStatusCode());
-            Toast.makeText(getContext(), "Error inesperado", Toast.LENGTH_SHORT).show();
-            updateUIGoogle(null);
-        }
-    }
-
-    private void firebaseAuthWithGoogle(String idToken) {
-        AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
-        mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                           // Log.d("Google", "signInWithCredential:success");
-                          //  Toast.makeText(getContext(), "Login google firebase", Toast.LENGTH_SHORT).show();
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            updateUIGoogle(user);
-                        } else {
-                            Toast.makeText(getContext(), "Error inesperado de google", Toast.LENGTH_SHORT).show();
-                            // If sign in fails, display a message to the user.
-                            //Log.w("Google", "signInWithCredential:failure", task.getException());
-                           // Snackbar.make(mBinding.mainLayout, "Authentication Failed.", Snackbar.LENGTH_SHORT).show();
-                            //updateUI(null);
-                        }
-
-                        // ...
-                    }
-                });
-    }
-*/
 
     @Override
     public void onStart() {
@@ -205,15 +132,7 @@ public class FragmentLogIn extends Fragment implements View.OnClickListener {
         //updateUIFirebase(currentUser);
     }
 
-  /*  public void updateUIGoogle(FirebaseUser account) {
-        if (account != null) {
-            //Pasar a fragment con datos de cuenta
-            Toast.makeText(getContext(), "Se logueo usuario de google", Toast.LENGTH_SHORT).show();
 
-        }
-
-    }
-*/
 
 
     public interface FragmentLogInListener {
