@@ -60,7 +60,7 @@
                 android:text="Precio"
 
 
-                android:textSize="15dp"
+                android:textSize="25dp"
                 android:textColor="#4837AA"
                 android:id="@+id/detailsProductoPrecio"
                 app:layout_constraintTop_toBottomOf="@id/detailsProductoTextView"/>
@@ -73,11 +73,22 @@
                 android:text="Ver ubicacion del vendedor"
 
 
-                android:textSize="15dp"
-                android:textColor="#000"
+                android:textSize="20dp"
+                android:textColor="#C8000000"
                 android:id="@+id/detailsAbrirMaps"
                 app:layout_constraintTop_toBottomOf="@id/detailsProductoPrecio" />
 
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="match_parent"
+                android:layout_marginTop="20dp"
+                android:layout_height="wrap_content"
+                android:text="Agregar a favoritos"
+
+
+                android:textSize="20dp"
+                android:textColor="#4837AA"
+                android:id="@+id/detailsFavoritos"
+                app:layout_constraintTop_toBottomOf="@id/detailsAbrirMaps" />
 
 
 
@@ -91,11 +102,11 @@
                 android:layout_marginTop="20dp"
                 android:text="Texto con la descripcion del producto en cuestion. "
 
-                android:textSize="20dp"
+                android:textSize="15dp"
 
                 app:layout_constraintLeft_toLeftOf="parent"
 
-                app:layout_constraintTop_toBottomOf="@+id/detailsAbrirMaps" />
+                app:layout_constraintTop_toBottomOf="@+id/detailsFavoritos" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

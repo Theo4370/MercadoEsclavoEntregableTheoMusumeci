@@ -69,7 +69,7 @@ public class FragmentUserInfo extends Fragment {
             @Override
             public void onClick(View v) {
 
-                UserInfo userInfo = new UserInfo(nombreCompleto.getText().toString(), apodo.getText().toString(), edad.getText().toString(), ciudad.getText().toString());
+                UserInfo userInfo = new UserInfo(nombreCompleto.getText().toString(), apodo.getText().toString(), edad.getText().toString(), ciudad.getText().toString(), null);
                 agregarUserInfoAFirestone(userInfo);
 
                 fragmentUserInfoListener.onClickFinalizarUserInfo();

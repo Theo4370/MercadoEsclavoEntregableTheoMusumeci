@@ -3,6 +3,7 @@ package com.example.mercadoesclavoentregable.model;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class UserInfo implements Serializable {
 
@@ -11,14 +12,26 @@ public class UserInfo implements Serializable {
     private String edad;
     private String ciudad;
 
+    private List<String> favoritosIds;
+
+
     public UserInfo() {
     }
 
-    public UserInfo(String nombreCompleto, String apodo, String edad, String ciudad) {
+    public UserInfo(String nombreCompleto, String apodo, String edad, String ciudad, List<String> favoritosIds) {
         this.nombreCompleto = nombreCompleto;
         this.apodo = apodo;
         this.edad = edad;
         this.ciudad = ciudad;
+        this.favoritosIds = favoritosIds;
+    }
+
+    public List<String> getFavoritosIds() {
+        return favoritosIds;
+    }
+
+    public void setFravoritosIds(List<String> fravoritosIds) {
+        this.favoritosIds = fravoritosIds;
     }
 
     public String getNombreCompleto() {

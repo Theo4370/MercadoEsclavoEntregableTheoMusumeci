@@ -16,6 +16,8 @@ import com.example.mercadoesclavoentregable.controller.ProductoController;
 import com.example.mercadoesclavoentregable.model.Producto;
 import com.example.mercadoesclavoentregable.util.ResultListener;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.List;
 
 public class ProductoAdapter extends RecyclerView.Adapter<ProductoAdapter.ProductoViewHolder> {
@@ -105,8 +107,11 @@ public class ProductoAdapter extends RecyclerView.Adapter<ProductoAdapter.Produc
             });
 
             ubicacionProducto.setText(unProducto.getSellerAdress().getCity().getNombreCity());
-            Integer precioInteger = unProducto.getPrice().intValue();
-            precioProducto.setText(precioInteger.toString());
+
+            NumberFormat formatt = new DecimalFormat("###,###,###.##");
+            String precioString = formatt.format(unProducto.getPrice());
+
+            precioProducto.setText(precioString);
             nombreProducto.setText(unProducto.getTitle());
         }
 

@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -17,8 +18,16 @@ import com.example.mercadoesclavoentregable.R;
 import com.example.mercadoesclavoentregable.controller.ProductoController;
 import com.example.mercadoesclavoentregable.model.Producto;
 import com.example.mercadoesclavoentregable.util.ResultListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textview.MaterialTextView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 
 /**
@@ -31,10 +40,15 @@ public class FragmentDetails extends Fragment {
     private TextView textViewDescripcion;
     private MaterialTextView textViewPrecio;
     private MaterialTextView textViewAbrirMaps;
+    private MaterialTextView textViewFavotirosButtom;
 
     private Producto producto;
     private ProductoController productoController;
     private FragmentDetailsListener fragmentDetailsListener;
+
+    private FirebaseFirestore db;
+    private FirebaseAuth mAuth;
+    private FirebaseUser firebaseUser;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -73,6 +87,17 @@ public class FragmentDetails extends Fragment {
         });
 
 
+        textViewFavotirosButtom.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                fragmentDetailsListener.onClickAgregarFavoritos(producto.getId());
+
+
+            }
+        });
+
+
         return view;
     }
 
@@ -83,7 +108,12 @@ public class FragmentDetails extends Fragment {
         getAndSetDescripcionProducto(producto, textViewDescripcion);
         getAndSetFotoProducto(producto, imageViewProducto);
         textViewProducto.setText(producto.getTitle());
-        textViewPrecio.setText("$ " + producto.getPrice().toString());
+
+        NumberFormat formatt = new DecimalFormat("###,###,###.##");
+        String precioString = formatt.format(producto.getPrice());
+
+
+        textViewPrecio.setText("$ " + precioString);
     }
 
     /**
@@ -136,11 +166,13 @@ public class FragmentDetails extends Fragment {
         textViewDescripcion = view.findViewById(R.id.detailsProductoDescripcion);
         textViewAbrirMaps = view.findViewById(R.id.detailsAbrirMaps);
         textViewPrecio = view.findViewById(R.id.detailsProductoPrecio);
+        textViewFavotirosButtom = view.findViewById(R.id.detailsFavoritos);
 
     }
 
     public interface FragmentDetailsListener {
         public void onClickAbrirMaps(Producto producto);
+        public void onClickAgregarFavoritos(String productoId);
     }
 
 }

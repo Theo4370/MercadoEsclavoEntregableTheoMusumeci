@@ -26,6 +26,7 @@ import com.example.mercadoesclavoentregable.model.UserInfo;
 import com.example.mercadoesclavoentregable.util.ResultListener;
 import com.example.mercadoesclavoentregable.view.fragment.AboutUsFragment;
 import com.example.mercadoesclavoentregable.view.fragment.FragmentDetails;
+import com.example.mercadoesclavoentregable.view.fragment.FragmentFavoritos;
 import com.example.mercadoesclavoentregable.view.fragment.FragmentListadoProductos;
 import com.example.mercadoesclavoentregable.view.fragment.FragmentLogIn;
 import com.example.mercadoesclavoentregable.view.fragment.FragmentMiCuenta;
@@ -47,12 +48,14 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-public class MainActivity extends AppCompatActivity implements FragmentListadoProductos.FragmentListadoProductosListener, FragmentLogIn.FragmentLogInListener, FragmentRegister.FragmentRegisterListener, FragmentUserInfo.FragmentUserInfoListener, FragmentMiCuenta.FragmentMiCuentaResultListener, FragmentDetails.FragmentDetailsListener {
+public class MainActivity extends AppCompatActivity implements FragmentListadoProductos.FragmentListadoProductosListener, FragmentLogIn.FragmentLogInListener, FragmentRegister.FragmentRegisterListener, FragmentUserInfo.FragmentUserInfoListener, FragmentMiCuenta.FragmentMiCuentaResultListener, FragmentDetails.FragmentDetailsListener, FragmentFavoritos.FragmentFavoritosListener {
 
     public static final String PRODUCTO = "Producto";
     public static final String USERINFO = "userInfo";
+    public static final String FAVORITOS_IDS = "favoritosIds";
 
     private TextView nombreUsuarioNavigationView;
 
@@ -60,6 +63,7 @@ public class MainActivity extends AppCompatActivity implements FragmentListadoPr
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
     private FragmentListadoProductos fragmentListadoProductos;
+    private FragmentFavoritos fragmentFavoritos;
     private ProductoController productoController;
     private Toolbar toolbar;
 
@@ -133,9 +137,7 @@ public class MainActivity extends AppCompatActivity implements FragmentListadoPr
                         break;
                     case R.id.menuPerfil:
                         if (mAuth.getCurrentUser() != null) {
-                            /*FragmentMiCuenta fragmentMiCuenta = new FragmentMiCuenta();
-                            pegarFragment(fragmentMiCuenta);
-                            */
+
                             getAndSetFragmentMiCuentaConUserInfo();
 
                         } else {
@@ -255,8 +257,56 @@ public class MainActivity extends AppCompatActivity implements FragmentListadoPr
         switch (item.getItemId()) {
             case R.id.appBarFavoritosButton:
 
-                //Pasar al fragment favoritos
+                fragmentFavoritos = new FragmentFavoritos();
+                db.collection(USERINFO)
+                        .document(mAuth.getCurrentUser().getUid())
+                        .get()
+                        .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                            @Override
+                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+
+                                UserInfo userInfo = documentSnapshot.toObject(UserInfo.class);
+
+                                if (userInfo != null) {
+
+                                    Bundle bundle = new Bundle();
+                                    bundle.putSerializable(USERINFO, userInfo);
+
+                                    fragmentFavoritos.setArguments(bundle);
+                                    pegarFragment(fragmentFavoritos);
+
+
+                                } else {
+                                    Toast.makeText(MainActivity.this, "Algo salio mal al cargar tus datos", Toast.LENGTH_SHORT).show();
+
+                                }
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(MainActivity.this, "Algo salio mal con el import", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+
+                /*  productoController = new ProductoController();
+                fragmentFavoritos = new FragmentFavoritos();
+                productoController.getProductoPorSearch("Planta", new ResultListener<ProductoContainer>() {
+                    @Override
+                    public void onFinish(ProductoContainer result) {
+
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("productos", result);
+
+                        fragmentFavoritos.setArguments(bundle);
+                        pegarFragment(fragmentFavoritos);
+
+                    }
+
+                });
+*/
                 break;
+
         }
         return super.onOptionsItemSelected(item);
     }
@@ -477,7 +527,7 @@ public class MainActivity extends AppCompatActivity implements FragmentListadoPr
                             GoogleSignInAccount googleAccount = GoogleSignIn.getLastSignedInAccount(MainActivity.this);
 
 
-                            UserInfo userInfo = new UserInfo(googleAccount.getDisplayName(), googleAccount.getFamilyName(), googleAccount.getGivenName(), googleAccount.getEmail());
+                            UserInfo userInfo = new UserInfo(googleAccount.getDisplayName(), googleAccount.getFamilyName(), googleAccount.getGivenName(), googleAccount.getEmail(), null);
 
                             db.collection(USERINFO)
                                     .document(firebaseUser.getUid())
@@ -524,5 +574,25 @@ public class MainActivity extends AppCompatActivity implements FragmentListadoPr
 
         intent.putExtras(bundle);
         startActivity(intent);
+    }
+
+    @Override
+    public void onClickAgregarFavoritos(String productoId) {
+        db.collection(MainActivity.USERINFO)
+                .document(firebaseUser.getUid())
+                .update(FAVORITOS_IDS, FieldValue.arrayUnion(productoId))
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Toast.makeText(MainActivity.this, "Agregado a favoritos", Toast.LENGTH_SHORT).show();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(MainActivity.this, "Salio mal agregar favorito", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
     }
 }

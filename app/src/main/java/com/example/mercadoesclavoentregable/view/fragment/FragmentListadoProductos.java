@@ -43,7 +43,7 @@ public class FragmentListadoProductos extends Fragment implements ProductoAdapte
 
         recyclerViewProductos = fragmentInflado.findViewById(R.id.fragmentListadoRecyclerView);
         Bundle bundle = getArguments();
-        ProductoContainer productoContainer =  (ProductoContainer) bundle.getSerializable("productos");
+        ProductoContainer productoContainer = (ProductoContainer) bundle.getSerializable("productos");
         List<Producto> productoList = productoContainer.getProductoList();
 
 
