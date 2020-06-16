@@ -49,7 +49,7 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-public class MainActivity extends AppCompatActivity implements FragmentListadoProductos.FragmentListadoProductosListener, FragmentLogIn.FragmentLogInListener, FragmentRegister.FragmentRegisterListener, FragmentUserInfo.FragmentUserInfoListener, FragmentMiCuenta.FragmentMiCuentaResultListener {
+public class MainActivity extends AppCompatActivity implements FragmentListadoProductos.FragmentListadoProductosListener, FragmentLogIn.FragmentLogInListener, FragmentRegister.FragmentRegisterListener, FragmentUserInfo.FragmentUserInfoListener, FragmentMiCuenta.FragmentMiCuentaResultListener, FragmentDetails.FragmentDetailsListener {
 
     public static final String PRODUCTO = "Producto";
     public static final String USERINFO = "userInfo";
@@ -85,21 +85,6 @@ public class MainActivity extends AppCompatActivity implements FragmentListadoPr
         navigationView();
         toolBar();
         getAndSetProductosAlRecycler();
-
-        //BOTON LOGOUT GOOGLE
-        /* botonLogOut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                client.signOut().addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-
-                        Toast.makeText(getContext(), "LogOutOnSuccess", Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
-        });
-*/
 
     }
 
@@ -201,7 +186,7 @@ public class MainActivity extends AppCompatActivity implements FragmentListadoPr
      * Configuracion onClickProducto mostrado en el recycler principal
      */
     @Override
-    public void onClick(final Producto producto) {
+    public void onClick(Producto producto) {
 
         Bundle bundle = new Bundle();
         bundle.putSerializable(PRODUCTO, producto);
@@ -530,4 +515,14 @@ public class MainActivity extends AppCompatActivity implements FragmentListadoPr
     }
 
 
+    @Override
+    public void onClickAbrirMaps(Producto producto) {
+        Intent intent = new Intent(MainActivity.this, MapsActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(MainActivity.PRODUCTO, producto);
+
+
+        intent.putExtras(bundle);
+        startActivity(intent);
+    }
 }

@@ -88,7 +88,6 @@ public class ProductoAdapter extends RecyclerView.Adapter<ProductoAdapter.Produc
         public void onBind(Producto unProducto) {
 
 
-            //FALTA AGREGAR UBICACIONNNNNNN
 
 
             //Hago un pedido nuevo de la foto de cada producto

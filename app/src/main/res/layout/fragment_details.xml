@@ -53,6 +53,34 @@
                 app:layout_constraintTop_toBottomOf="@+id/cardView" />
 
 
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="match_parent"
+                android:layout_marginTop="20dp"
+                android:layout_height="wrap_content"
+                android:text="Precio"
+
+
+                android:textSize="15dp"
+                android:textColor="#4837AA"
+                android:id="@+id/detailsProductoPrecio"
+                app:layout_constraintTop_toBottomOf="@id/detailsProductoTextView"/>
+
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="match_parent"
+                android:layout_marginTop="20dp"
+                android:layout_height="wrap_content"
+                android:text="Ver ubicacion del vendedor"
+
+
+                android:textSize="15dp"
+                android:textColor="#000"
+                android:id="@+id/detailsAbrirMaps"
+                app:layout_constraintTop_toBottomOf="@id/detailsProductoPrecio" />
+
+
+
+
 
 
             <TextView
@@ -67,7 +95,7 @@
 
                 app:layout_constraintLeft_toLeftOf="parent"
 
-                app:layout_constraintTop_toBottomOf="@+id/detailsProductoTextView" />
+                app:layout_constraintTop_toBottomOf="@+id/detailsAbrirMaps" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

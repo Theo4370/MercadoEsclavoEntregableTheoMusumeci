@@ -1,6 +1,7 @@
 package com.example.mercadoesclavoentregable.model;
 
 import com.google.gson.annotations.SerializedName;
+import com.google.type.LatLng;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -35,11 +36,18 @@ public class Producto implements Serializable {
     private String nombreCity;
 
 
-    public Producto() {
+    //PRUEBA ATRIBUTOS NUEVOS LOCALIZACION
 
+    @SerializedName("latitude")
+    private String latitud;
+    @SerializedName("longitude")
+    private String longitud;
+
+
+    public Producto() {
     }
 
-    public Producto(String id, String title, Double price, String secureUrl, List<Producto> pictures, String thumbnail, String condition, String plainText, Producto sellerAdress, Producto city, String nombreCity) {
+    public Producto(String id, String title, Double price, String secureUrl, List<Producto> pictures, String thumbnail, String condition, String plainText, Producto sellerAdress, Producto city, String nombreCity, String latitud, String longitud) {
         this.id = id;
         this.title = title;
         this.price = price;
@@ -51,8 +59,26 @@ public class Producto implements Serializable {
         this.sellerAdress = sellerAdress;
         this.city = city;
         this.nombreCity = nombreCity;
+        this.latitud = latitud;
+        this.longitud = longitud;
+
     }
 
+    public String getLatitud() {
+        return latitud;
+    }
+
+    public void setLatitud(String latitud) {
+        this.latitud = latitud;
+    }
+
+    public String getLongitud() {
+        return longitud;
+    }
+
+    public void setLongitud(String longitud) {
+        this.longitud = longitud;
+    }
     public Producto getCity() {
         return city;
     }
