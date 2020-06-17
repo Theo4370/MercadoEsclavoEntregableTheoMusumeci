@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.mercadoesclavoentregable.R;
 import com.example.mercadoesclavoentregable.controller.ProductoController;
+import com.example.mercadoesclavoentregable.databinding.CeldaProductoBinding;
 import com.example.mercadoesclavoentregable.model.Producto;
 import com.example.mercadoesclavoentregable.util.ResultListener;
 
@@ -26,6 +27,7 @@ public class ProductoAdapter extends RecyclerView.Adapter<ProductoAdapter.Produc
     private List<Producto> listaDeProductos;
     private ProductoAdapterListener productoAdapterListener;
     private ProductoController productoController;
+    private CeldaProductoBinding binding;
 
 
     public ProductoAdapter(List<Producto> listaDeProductos, ProductoAdapterListener listener) {
@@ -38,8 +40,11 @@ public class ProductoAdapter extends RecyclerView.Adapter<ProductoAdapter.Produc
     @Override
     public ProductoViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-        LayoutInflater infladorLayout = LayoutInflater.from(parent.getContext());
-        View celdaView = infladorLayout.inflate(R.layout.celda_producto, parent, false);
+
+        binding = CeldaProductoBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+        View celdaView = binding.getRoot();
+
+//        View celdaView = infladorLayout.inflate(R.layout.celda_producto, parent, false);
 
         return new ProductoViewHolder(celdaView);
     }
@@ -63,19 +68,9 @@ public class ProductoAdapter extends RecyclerView.Adapter<ProductoAdapter.Produc
 
     protected class ProductoViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView nombreProducto;
-        private TextView precioProducto;
-        private ImageView fotoProducto;
-        private TextView ubicacionProducto;
-
-
+        
         public ProductoViewHolder(@NonNull View itemView) {
             super(itemView);
-
-            nombreProducto = itemView.findViewById(R.id.celdaArticuloTextViewArticulo);
-            precioProducto = itemView.findViewById(R.id.celdaArticuloTextViewPrecio);
-            fotoProducto = itemView.findViewById(R.id.celdaArticuloImageViewFoto);
-            ubicacionProducto = itemView.findViewById(R.id.celdaArticuloTextViewUbicacion);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -89,30 +84,28 @@ public class ProductoAdapter extends RecyclerView.Adapter<ProductoAdapter.Produc
 
         public void onBind(Producto unProducto) {
 
-
-
-
             //Hago un pedido nuevo de la foto de cada producto
             productoController = new ProductoController();
             productoController.getProductoById(unProducto.getId(), new ResultListener<Producto>() {
                 @Override
                 public void onFinish(Producto result) {
                     Producto producto = result;
-                    Glide.with(fotoProducto.getContext())
+                    Glide.with(binding.celdaArticuloImageViewFoto.getContext())
                             .load(producto.getPictures().get(0).getSecureUrl())
-                            .into(fotoProducto);
+                            .into(binding.celdaArticuloImageViewFoto);
 
 
                 }
             });
 
-            ubicacionProducto.setText(unProducto.getSellerAdress().getCity().getNombreCity());
+           binding.celdaArticuloTextViewUbicacion.setText(unProducto.getSellerAdress().getCity().getNombreCity());
+
 
             NumberFormat formatt = new DecimalFormat("###,###,###.##");
             String precioString = formatt.format(unProducto.getPrice());
 
-            precioProducto.setText(precioString);
-            nombreProducto.setText(unProducto.getTitle());
+            binding.celdaArticuloTextViewPrecio.setText(precioString);
+            binding.celdaArticuloTextViewArticulo.setText(unProducto.getTitle());
         }
 
 
