@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.mercadoesclavoentregable.R;
+import com.example.mercadoesclavoentregable.databinding.FragmentUserInfoBinding;
 import com.example.mercadoesclavoentregable.model.UserInfo;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -24,11 +25,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 public class FragmentUserInfo extends Fragment {
 
-    private EditText nombreCompleto;
-    private EditText apodo;
-    private EditText edad;
-    private EditText ciudad;
-    private Button registerFirebaseFirestore;
+
+    private FragmentUserInfoBinding binding;
 
     private FirebaseFirestore db;
     private FirebaseAuth mAuth;
@@ -51,25 +49,21 @@ public class FragmentUserInfo extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_user_info, container, false);
+        binding = FragmentUserInfoBinding.inflate(inflater, container, false);
+        View view = binding.getRoot();
+
 
         mAuth = FirebaseAuth.getInstance();
         firebaseUser = mAuth.getCurrentUser();
         db = FirebaseFirestore.getInstance();
 
 
-        nombreCompleto = view.findViewById(R.id.editTextNombreCompleto);
-        apodo = view.findViewById(R.id.editTextApodo);
-        edad = view.findViewById(R.id.editTextEdad);
-        ciudad = view.findViewById(R.id.editTextCiudad);
 
-        registerFirebaseFirestore = view.findViewById(R.id.botonFirebaseFirestore);
-
-        registerFirebaseFirestore.setOnClickListener(new View.OnClickListener() {
+        binding.botonFirebaseFirestore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                UserInfo userInfo = new UserInfo(nombreCompleto.getText().toString(), apodo.getText().toString(), edad.getText().toString(), ciudad.getText().toString(), null);
+                UserInfo userInfo = new UserInfo(binding.editTextNombreCompleto.getText().toString(), binding.editTextApodo.getText().toString(), binding.editTextEdad.getText().toString(), binding.editTextCiudad.getText().toString(), null);
                 agregarUserInfoAFirestone(userInfo);
 
                 fragmentUserInfoListener.onClickFinalizarUserInfo();
@@ -91,7 +85,7 @@ public class FragmentUserInfo extends Fragment {
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        if(task.isSuccessful()){
+                        if (task.isSuccessful()) {
                             Toast.makeText(getContext(), "Datos actualizados", Toast.LENGTH_SHORT).show();
                         } else {
                             Toast.makeText(getContext(), "Error en la base de datos", Toast.LENGTH_SHORT).show();
@@ -99,9 +93,6 @@ public class FragmentUserInfo extends Fragment {
                         }
                     }
                 });
-
-
-
 
 
     }

@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.mercadoesclavoentregable.R;
+import com.example.mercadoesclavoentregable.databinding.FragmentListadoProductosBinding;
 import com.example.mercadoesclavoentregable.model.Producto;
 import com.example.mercadoesclavoentregable.model.ProductoContainer;
 import com.example.mercadoesclavoentregable.view.adapter.ProductoAdapter;
@@ -24,7 +25,8 @@ public class FragmentListadoProductos extends Fragment implements ProductoAdapte
 
     private FragmentListadoProductosListener fragmentListadoProductosListener;
     private ProductoAdapter productoAdapter;
-    private RecyclerView recyclerViewProductos;
+
+    private FragmentListadoProductosBinding binding;
 
     public FragmentListadoProductos() {
 
@@ -38,10 +40,9 @@ public class FragmentListadoProductos extends Fragment implements ProductoAdapte
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View fragmentInflado = inflater.inflate(R.layout.fragment_listado_productos, container, false);
+        binding = FragmentListadoProductosBinding.inflate(inflater, container, false);
+        View view = binding.getRoot();
 
-
-        recyclerViewProductos = fragmentInflado.findViewById(R.id.fragmentListadoRecyclerView);
         Bundle bundle = getArguments();
         ProductoContainer productoContainer = (ProductoContainer) bundle.getSerializable("productos");
         List<Producto> productoList = productoContainer.getProductoList();
@@ -51,13 +52,12 @@ public class FragmentListadoProductos extends Fragment implements ProductoAdapte
         productoAdapter = new ProductoAdapter(productoList, this);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
 
-        recyclerViewProductos.setLayoutManager(linearLayoutManager);
-        recyclerViewProductos.setAdapter(productoAdapter);
+        binding.fragmentListadoRecyclerView.setLayoutManager(linearLayoutManager);
+        binding.fragmentListadoRecyclerView.setAdapter(productoAdapter);
 
 
-        return fragmentInflado;
+        return view;
     }
-
 
     @Override
     public void onClickProductoAdapterListener(Producto producto) {

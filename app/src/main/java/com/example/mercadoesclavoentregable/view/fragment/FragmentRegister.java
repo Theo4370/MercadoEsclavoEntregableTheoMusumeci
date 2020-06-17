@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.mercadoesclavoentregable.R;
+import com.example.mercadoesclavoentregable.databinding.FragmentRegisterBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -26,11 +27,7 @@ import java.util.concurrent.Executor;
 
 public class FragmentRegister extends Fragment {
 
-
-    private EditText mail;
-    private EditText password;
-
-    private Button botonRegistrarFirebase;
+    private FragmentRegisterBinding binding;
 
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
@@ -51,22 +48,21 @@ public class FragmentRegister extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        binding = FragmentRegisterBinding.inflate(inflater, container, false);
+        View view = binding.getRoot();
 
-        View view = inflater.inflate(R.layout.fragment_register, container, false);
 
         mAuth = FirebaseAuth.getInstance();
 
         db = FirebaseFirestore.getInstance();
 
-        findViewById(view);
 
 
-        botonRegistrarFirebase.setOnClickListener(new View.OnClickListener() {
+        binding.botonRegisterFirebase.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                fragmentRegisterListener.onClickBotonFinalizarRegister(mail.getText().toString(), password.getText().toString());
-
+                fragmentRegisterListener.onClickBotonFinalizarRegister(binding.editTextMailRegister.getText().toString(), binding.editTextContrasenaRegister.getText().toString());
 
 
             }
@@ -75,12 +71,6 @@ public class FragmentRegister extends Fragment {
         return view;
     }
 
-    private void findViewById(View view) {
-        mail = view.findViewById(R.id.editTextMailRegister);
-        password = view.findViewById(R.id.editTextContraseñaRegister);
-        botonRegistrarFirebase = view.findViewById(R.id.botonRegisterFirebase);
-
-    }
 
 
     public interface FragmentRegisterListener {

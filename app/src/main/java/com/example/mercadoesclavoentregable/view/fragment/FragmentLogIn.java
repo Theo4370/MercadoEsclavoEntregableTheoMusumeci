@@ -17,6 +17,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.mercadoesclavoentregable.R;
+import com.example.mercadoesclavoentregable.databinding.FragmentLogInBinding;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -41,15 +42,8 @@ import java.util.concurrent.Executor;
  */
 public class FragmentLogIn extends Fragment implements View.OnClickListener {
 
-    private SignInButton botonRegisterGoogle;
-    private Button botonLogOut;
-    private Button botonLogInFirebase;
-//    private GoogleSignInClient client;
-   // private static final int RC_SIGN_IN_GOOGLE = 1;
 
-    private EditText mail;
-    private EditText password;
-    private MaterialTextView textoRegistrarse;
+    private FragmentLogInBinding binding;
 
     private FragmentLogInListener fragmentLogInListener;
 
@@ -69,35 +63,27 @@ public class FragmentLogIn extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        binding = FragmentLogInBinding.inflate(inflater, container, false);
+        View view = binding.getRoot();
 
-        View view = inflater.inflate(R.layout.fragment_log_in, container, false);
+
 
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = mAuth.getCurrentUser();
 
-        findViewById(view);
 
 
-        botonLogInFirebase.setOnClickListener(this);
-        botonRegisterGoogle.setOnClickListener(this);
-        botonRegisterGoogle.setSize(SignInButton.SIZE_WIDE);
-        textoRegistrarse.setOnClickListener(this);
+
+        binding.botonLogIn.setOnClickListener(this);
+        binding.botonRegisterGoogle.setOnClickListener(this);
+        binding.botonRegisterGoogle.setSize(SignInButton.SIZE_WIDE);
+        binding.textViewRegistrarse.setOnClickListener(this);
 
 
         return view;
     }
 
 
-    private void findViewById(View view) {
-
-        botonRegisterGoogle = view.findViewById(R.id.botonRegisterGoogle);
-        botonLogOut = view.findViewById(R.id.botonLogOut);
-        botonLogInFirebase = view.findViewById(R.id.botonLogIn);
-        mail = view.findViewById(R.id.editTextMail);
-        password = view.findViewById(R.id.editTextContraseña);
-        textoRegistrarse = view.findViewById(R.id.textViewRegistrarse);
-
-    }
 
 
     @Override
@@ -105,7 +91,7 @@ public class FragmentLogIn extends Fragment implements View.OnClickListener {
         switch (v.getId()) {
 
             case R.id.botonLogIn:
-                fragmentLogInListener.onClickSingInFirebase(mail.getText().toString(), password.getText().toString());
+                fragmentLogInListener.onClickSingInFirebase(binding.editTextMail.getText().toString(), binding.editTextContrasena.getText().toString());
 
                 break;
             case R.id.botonRegisterGoogle:

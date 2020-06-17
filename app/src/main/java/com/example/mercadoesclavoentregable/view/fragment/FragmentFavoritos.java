@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import com.example.mercadoesclavoentregable.MainActivity;
 import com.example.mercadoesclavoentregable.R;
 import com.example.mercadoesclavoentregable.controller.ProductoController;
+import com.example.mercadoesclavoentregable.databinding.FragmentFavoritosBinding;
 import com.example.mercadoesclavoentregable.model.Producto;
 import com.example.mercadoesclavoentregable.model.UserInfo;
 import com.example.mercadoesclavoentregable.util.ResultListener;
@@ -29,9 +30,11 @@ public class FragmentFavoritos extends Fragment implements ProductoAdapter.Produ
 
     private ProductoAdapter productoAdapter;
     private List<Producto> favoritosList;
-    private RecyclerView recyclerView;
+
     private FragmentFavoritosListener fragmentFavoritosListener;
     private ProductoController productoController;
+
+    private FragmentFavoritosBinding binding;
 
 
     @Override
@@ -41,18 +44,16 @@ public class FragmentFavoritos extends Fragment implements ProductoAdapter.Produ
     }
 
     public FragmentFavoritos() {
-        // Required empty public constructor
+
     }
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_favoritos, container, false);
+        binding = FragmentFavoritosBinding.inflate(inflater, container, false);
+        View view = binding.getRoot();
 
-
-        recyclerView = view.findViewById(R.id.fragmentFavoritosRecyclerView);
 
         Bundle bundle = getArguments();
 
@@ -80,8 +81,8 @@ public class FragmentFavoritos extends Fragment implements ProductoAdapter.Produ
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
 
-        recyclerView.setLayoutManager(linearLayoutManager);
-        recyclerView.setAdapter(productoAdapter);
+        binding.fragmentFavoritosRecyclerView.setLayoutManager(linearLayoutManager);
+        binding.fragmentFavoritosRecyclerView.setAdapter(productoAdapter);
 
 
         return view;

@@ -16,6 +16,7 @@ import com.bumptech.glide.Glide;
 import com.example.mercadoesclavoentregable.MainActivity;
 import com.example.mercadoesclavoentregable.R;
 import com.example.mercadoesclavoentregable.controller.ProductoController;
+import com.example.mercadoesclavoentregable.databinding.FragmentDetailsBinding;
 import com.example.mercadoesclavoentregable.model.Producto;
 import com.example.mercadoesclavoentregable.util.ResultListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -42,13 +43,12 @@ public class FragmentDetails extends Fragment {
     private MaterialTextView textViewAbrirMaps;
     private MaterialTextView textViewFavotirosButtom;
 
+    private FragmentDetailsBinding binding;
+
     private Producto producto;
     private ProductoController productoController;
     private FragmentDetailsListener fragmentDetailsListener;
 
-    private FirebaseFirestore db;
-    private FirebaseAuth mAuth;
-    private FirebaseUser firebaseUser;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -64,14 +64,17 @@ public class FragmentDetails extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_details, container, false);
+
+        binding = FragmentDetailsBinding.inflate(inflater, container, false);
+        View view = binding.getRoot();
+
 
         producto = getProductoClickeado();
-        findViewById(view);
+
         getAndSetViews();
 
 
-        textViewAbrirMaps.setOnClickListener(new View.OnClickListener() {
+        binding.detailsAbrirMaps.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 productoController.getProductoById(producto.getId(), new ResultListener<Producto>() {
@@ -87,7 +90,7 @@ public class FragmentDetails extends Fragment {
         });
 
 
-        textViewFavotirosButtom.setOnClickListener(new View.OnClickListener() {
+        binding.detailsFavoritos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -105,15 +108,15 @@ public class FragmentDetails extends Fragment {
      * Hace los pedidos a internet de la descripcion y foto y las setea a las views.
      */
     private void getAndSetViews() {
-        getAndSetDescripcionProducto(producto, textViewDescripcion);
-        getAndSetFotoProducto(producto, imageViewProducto);
-        textViewProducto.setText(producto.getTitle());
+        getAndSetDescripcionProducto(producto, binding.detailsProductoDescripcion);
+        getAndSetFotoProducto(producto, binding.detailsProductoImagen);
+        binding.detailsProductoTextView.setText(producto.getTitle());
 
         NumberFormat formatt = new DecimalFormat("###,###,###.##");
         String precioString = formatt.format(producto.getPrice());
 
 
-        textViewPrecio.setText("$ " + precioString);
+        binding.detailsProductoPrecio.setText("$ " + precioString);
     }
 
     /**
@@ -157,21 +160,9 @@ public class FragmentDetails extends Fragment {
         return (Producto) bundle.getSerializable(MainActivity.PRODUCTO);
     }
 
-    /**
-     * Se hacen los find by id de los componentes del fragment
-     */
-    private void findViewById(View view) {
-        imageViewProducto = view.findViewById(R.id.detailsProductoImagen);
-        textViewProducto = view.findViewById(R.id.detailsProductoTextView);
-        textViewDescripcion = view.findViewById(R.id.detailsProductoDescripcion);
-        textViewAbrirMaps = view.findViewById(R.id.detailsAbrirMaps);
-        textViewPrecio = view.findViewById(R.id.detailsProductoPrecio);
-        textViewFavotirosButtom = view.findViewById(R.id.detailsFavoritos);
-
-    }
-
     public interface FragmentDetailsListener {
         public void onClickAbrirMaps(Producto producto);
+
         public void onClickAgregarFavoritos(String productoId);
     }
 

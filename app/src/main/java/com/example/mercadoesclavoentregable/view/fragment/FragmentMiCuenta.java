@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.example.mercadoesclavoentregable.MainActivity;
 import com.example.mercadoesclavoentregable.R;
+import com.example.mercadoesclavoentregable.databinding.FragmentMiCuentaBinding;
 import com.example.mercadoesclavoentregable.model.UserInfo;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -23,14 +24,12 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.math.BigInteger;
+
 
 public class FragmentMiCuenta extends Fragment {
 
-    private TextView nombreCompleto;
-    private TextView apodo;
-    private TextView edad;
-    private TextView ciudad;
-    private Button botonLogOut;
+    private FragmentMiCuentaBinding binding;
 
 
     private FirebaseAuth mAuth;
@@ -52,23 +51,21 @@ public class FragmentMiCuenta extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_mi_cuenta, container, false);
-
-
-        findViewById(view);
+        binding = FragmentMiCuentaBinding.inflate(getLayoutInflater());
+        View view = binding.getRoot();
 
 
         Bundle bundle = getArguments();
         UserInfo userInfo = (UserInfo) bundle.getSerializable(MainActivity.USERINFO);
 
 
-        nombreCompleto.setText(userInfo.getNombreCompleto());
-        apodo.setText(userInfo.getApodo());
-        edad.setText(userInfo.getEdad());
-        ciudad.setText(userInfo.getCiudad());
+        binding.textViewNombreCompleto.setText(userInfo.getNombreCompleto());
+        binding.textViewApodo.setText(userInfo.getApodo());
+        binding.textViewEdad.setText(userInfo.getEdad());
+        binding.textViewCiudad.setText(userInfo.getCiudad());
 
 
-        botonLogOut.setOnClickListener(new View.OnClickListener() {
+       binding.botonLogOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -81,13 +78,6 @@ public class FragmentMiCuenta extends Fragment {
         return view;
     }
 
-    private void findViewById(View view) {
-        nombreCompleto = view.findViewById(R.id.textViewNombreCompleto);
-        apodo = view.findViewById(R.id.textViewApodo);
-        edad = view.findViewById(R.id.textViewEdad);
-        ciudad = view.findViewById(R.id.textViewCiudad);
-        botonLogOut = view.findViewById(R.id.botonLogOut);
-    }
 
 
     public interface FragmentMiCuentaResultListener {
