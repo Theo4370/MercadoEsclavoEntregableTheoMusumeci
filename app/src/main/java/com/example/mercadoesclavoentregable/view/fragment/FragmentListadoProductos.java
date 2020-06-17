@@ -13,9 +13,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.mercadoesclavoentregable.R;
+import com.example.mercadoesclavoentregable.controller.ProductoController;
 import com.example.mercadoesclavoentregable.databinding.FragmentListadoProductosBinding;
 import com.example.mercadoesclavoentregable.model.Producto;
 import com.example.mercadoesclavoentregable.model.ProductoContainer;
+import com.example.mercadoesclavoentregable.util.ResultListener;
 import com.example.mercadoesclavoentregable.view.adapter.ProductoAdapter;
 
 import java.util.List;
@@ -25,6 +27,7 @@ public class FragmentListadoProductos extends Fragment implements ProductoAdapte
 
     private FragmentListadoProductosListener fragmentListadoProductosListener;
     private ProductoAdapter productoAdapter;
+    private ProductoController productoController;
 
     private FragmentListadoProductosBinding binding;
 
@@ -44,16 +47,42 @@ public class FragmentListadoProductos extends Fragment implements ProductoAdapte
         View view = binding.getRoot();
 
         Bundle bundle = getArguments();
-        ProductoContainer productoContainer = (ProductoContainer) bundle.getSerializable("productos");
+        final ProductoContainer productoContainer = (ProductoContainer) bundle.getSerializable("productos");
         List<Producto> productoList = productoContainer.getProductoList();
 
 
+        productoController = new ProductoController();
 
         productoAdapter = new ProductoAdapter(productoList, this);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
 
         binding.fragmentListadoRecyclerView.setLayoutManager(linearLayoutManager);
         binding.fragmentListadoRecyclerView.setAdapter(productoAdapter);
+
+        binding.fragmentListadoRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull final RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                Integer posicionActual = linearLayoutManager.findLastVisibleItemPosition();
+                Integer ultimaCelda = linearLayoutManager.getItemCount();
+
+                if (posicionActual.equals(ultimaCelda - 3)) {
+
+                    if (productoController.getHayMasProductos()) {
+
+                        productoController.getProductoPorSearchPaginado(productoContainer.getQuery(), new ResultListener<ProductoContainer>() {
+                            @Override
+                            public void onFinish(ProductoContainer result) {
+                                productoAdapter.agregarProductos(result.getProductoList());
+                            }
+
+                        });
+                    }
+
+                }
+
+            }
+        });
 
 
         return view;

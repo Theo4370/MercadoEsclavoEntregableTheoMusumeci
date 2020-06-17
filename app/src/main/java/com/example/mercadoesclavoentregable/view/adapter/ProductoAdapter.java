@@ -39,12 +39,9 @@ public class ProductoAdapter extends RecyclerView.Adapter<ProductoAdapter.Produc
     @NonNull
     @Override
     public ProductoViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-
-
-        binding = CeldaProductoBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
-        View celdaView = binding.getRoot();
-
-//        View celdaView = infladorLayout.inflate(R.layout.celda_producto, parent, false);
+        // binding = CeldaProductoBinding.inflate(get);
+        LayoutInflater infladorLayout = LayoutInflater.from(parent.getContext());
+        View celdaView = infladorLayout.inflate(R.layout.celda_producto, parent, false);
 
         return new ProductoViewHolder(celdaView);
     }
@@ -68,9 +65,19 @@ public class ProductoAdapter extends RecyclerView.Adapter<ProductoAdapter.Produc
 
     protected class ProductoViewHolder extends RecyclerView.ViewHolder {
 
-        
+        private TextView nombreProducto;
+        private TextView precioProducto;
+        private ImageView fotoProducto;
+        private TextView ubicacionProducto;
+
+
         public ProductoViewHolder(@NonNull View itemView) {
             super(itemView);
+
+            nombreProducto = itemView.findViewById(R.id.celdaArticuloTextViewArticulo);
+            precioProducto = itemView.findViewById(R.id.celdaArticuloTextViewPrecio);
+            fotoProducto = itemView.findViewById(R.id.celdaArticuloImageViewFoto);
+            ubicacionProducto = itemView.findViewById(R.id.celdaArticuloTextViewUbicacion);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -90,28 +97,42 @@ public class ProductoAdapter extends RecyclerView.Adapter<ProductoAdapter.Produc
                 @Override
                 public void onFinish(Producto result) {
                     Producto producto = result;
-                    Glide.with(binding.celdaArticuloImageViewFoto.getContext())
+                    Glide.with(fotoProducto.getContext())
                             .load(producto.getPictures().get(0).getSecureUrl())
-                            .into(binding.celdaArticuloImageViewFoto);
+                            .into(fotoProducto);
 
 
                 }
             });
 
-           binding.celdaArticuloTextViewUbicacion.setText(unProducto.getSellerAdress().getCity().getNombreCity());
-
+            ubicacionProducto.setText(unProducto.getSellerAdress().getCity().getNombreCity());
 
             NumberFormat formatt = new DecimalFormat("###,###,###.##");
             String precioString = formatt.format(unProducto.getPrice());
 
-            binding.celdaArticuloTextViewPrecio.setText(precioString);
-            binding.celdaArticuloTextViewArticulo.setText(unProducto.getTitle());
+            precioProducto.setText(precioString);
+            nombreProducto.setText(unProducto.getTitle());
         }
 
 
     }
 
+    public void agregarProducto(Producto producto) {
+        listaDeProductos.add(producto);
+        notifyItemInserted(listaDeProductos.size() - 1);
+
+    }
+
+    public void agregarProductos(List<Producto> listaDeProductos) {
+        for (Producto producto : listaDeProductos) {
+            agregarProducto(producto);
+        }
+    }
+
+
     public interface ProductoAdapterListener {
         public void onClickProductoAdapterListener(Producto producto);
     }
+
+
 }

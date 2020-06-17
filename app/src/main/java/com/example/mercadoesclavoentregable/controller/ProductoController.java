@@ -6,24 +6,39 @@ import com.example.mercadoesclavoentregable.model.ProductoContainer;
 import com.example.mercadoesclavoentregable.util.ResultListener;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class ProductoController {
 
     private ProductoDao productoDao;
+    private Integer offset = 0;
+    private Boolean hayMasProductos = true;
+    public static final Integer PAGE_SIZE = 10;
 
     public ProductoController() {
         this.productoDao = new ProductoDao() {
         };
     }
 
-    public void getProductoPorSearch(String id, final ResultListener<ProductoContainer> resultListenerFromView) {
-        productoDao.getProductoPorSearch(id, new ResultListener<ProductoContainer>() {
+
+    public void getProductoPorSearchPaginado(String producto, final ResultListener<ProductoContainer> resultListenerFromView){
+        productoDao.getProductoPorSearchPaginado(producto, offset, PAGE_SIZE, new ResultListener<ProductoContainer>() {
             @Override
             public void onFinish(ProductoContainer result) {
-                resultListenerFromView.onFinish(result);
+
+                if (result.getProductoList().size()<PAGE_SIZE){
+                  hayMasProductos = false;
+                } else {
+                    offset = offset + PAGE_SIZE;
+                    resultListenerFromView.onFinish(result);
+                }
             }
         });
+
+
+    }
+
+    public Boolean getHayMasProductos() {
+        return hayMasProductos;
     }
 
     public void getProductoById(String id, final ResultListener<Producto> resultListeneFromView){
