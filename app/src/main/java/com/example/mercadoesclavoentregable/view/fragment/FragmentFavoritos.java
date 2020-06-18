@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -20,8 +21,11 @@ import com.example.mercadoesclavoentregable.model.Producto;
 import com.example.mercadoesclavoentregable.model.UserInfo;
 import com.example.mercadoesclavoentregable.util.ResultListener;
 import com.example.mercadoesclavoentregable.view.adapter.ProductoAdapter;
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -36,6 +40,8 @@ public class FragmentFavoritos extends Fragment implements ProductoAdapter.Produ
 
     private FragmentFavoritosBinding binding;
 
+
+    private Producto deletedProducto = null;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -59,22 +65,9 @@ public class FragmentFavoritos extends Fragment implements ProductoAdapter.Produ
 
         UserInfo userInfo = (UserInfo) bundle.getSerializable(MainActivity.USERINFO);
 
-        List<String> favoritosIds = userInfo.getFavoritosIds();
+        favoritosList = userInfo.getFavoritosList();
 
-        productoController = new ProductoController();
-        favoritosList = new ArrayList<>();
 
-        for (final String favoritosId : favoritosIds) {
-
-            productoController.getProductoById(favoritosId, new ResultListener<Producto>() {
-                @Override
-                public void onFinish(Producto result) {
-                    favoritosList.add(result);
-                    productoAdapter.notifyDataSetChanged();
-                }
-            });
-
-        }
 
         productoAdapter = new ProductoAdapter(favoritosList, this);
 
@@ -84,9 +77,46 @@ public class FragmentFavoritos extends Fragment implements ProductoAdapter.Produ
         binding.fragmentFavoritosRecyclerView.setLayoutManager(linearLayoutManager);
         binding.fragmentFavoritosRecyclerView.setAdapter(productoAdapter);
 
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
+        itemTouchHelper.attachToRecyclerView(binding.fragmentFavoritosRecyclerView);
+
 
         return view;
     }
+
+
+    ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN |
+            ItemTouchHelper.START |
+            ItemTouchHelper.END,
+            ItemTouchHelper.RIGHT) {
+        @Override
+        public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+
+            Integer fromPosition = viewHolder.getAdapterPosition();
+            Integer toPosition = target.getAdapterPosition();
+            Collections.swap(favoritosList, fromPosition, toPosition);
+            recyclerView.getAdapter().notifyItemMoved(fromPosition, toPosition);
+            return false;
+        }
+
+        @Override
+        public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+            final int position = viewHolder.getAdapterPosition();
+
+            deletedProducto = favoritosList.get(position);
+            favoritosList.remove(deletedProducto);
+
+            productoAdapter.notifyItemRemoved(position);
+            Snackbar.make(binding.fragmentFavoritosRecyclerView, "Producto eliminado", BaseTransientBottomBar.LENGTH_LONG)
+                    .setAction("Deshacer", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            favoritosList.add(position, deletedProducto);
+                            productoAdapter.notifyItemInserted(position);
+                        }
+                    }).show();
+        }
+    };
 
 
     @Override

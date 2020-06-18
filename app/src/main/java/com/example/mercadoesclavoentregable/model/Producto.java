@@ -27,7 +27,7 @@ public class Producto implements Serializable {
     private String plainText;
 
 
-    //PRUEBA ATRIBUTOS NUEVOS
+
     @SerializedName("seller_address")
     private Producto sellerAdress;
     @SerializedName("city")
@@ -36,7 +36,7 @@ public class Producto implements Serializable {
     private String nombreCity;
 
 
-    //PRUEBA ATRIBUTOS NUEVOS LOCALIZACION
+
 
     @SerializedName("latitude")
     private String latitud;

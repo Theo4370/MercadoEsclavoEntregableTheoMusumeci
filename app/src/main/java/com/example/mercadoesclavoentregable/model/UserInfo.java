@@ -12,26 +12,26 @@ public class UserInfo implements Serializable {
     private String edad;
     private String ciudad;
 
-    private List<String> favoritosIds;
+    private List<Producto> favoritosList;
 
 
     public UserInfo() {
     }
 
-    public UserInfo(String nombreCompleto, String apodo, String edad, String ciudad, List<String> favoritosIds) {
+    public UserInfo(String nombreCompleto, String apodo, String edad, String ciudad, List<Producto> favoritosList) {
         this.nombreCompleto = nombreCompleto;
         this.apodo = apodo;
         this.edad = edad;
         this.ciudad = ciudad;
-        this.favoritosIds = favoritosIds;
+        this.favoritosList = favoritosList;
     }
 
-    public List<String> getFavoritosIds() {
-        return favoritosIds;
+    public List<Producto> getFavoritosList() {
+        return favoritosList;
     }
 
-    public void setFravoritosIds(List<String> fravoritosIds) {
-        this.favoritosIds = fravoritosIds;
+    public void setFravoritosList(List<Producto> favoritosList) {
+        this.favoritosList = favoritosList;
     }
 
     public String getNombreCompleto() {

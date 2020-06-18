@@ -53,12 +53,14 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.List;
+
 
 public class MainActivity extends AppCompatActivity implements FragmentListadoProductos.FragmentListadoProductosListener, FragmentLogIn.FragmentLogInListener, FragmentRegister.FragmentRegisterListener, FragmentUserInfo.FragmentUserInfoListener, FragmentMiCuenta.FragmentMiCuentaResultListener, FragmentDetails.FragmentDetailsListener, FragmentFavoritos.FragmentFavoritosListener {
 
     public static final String PRODUCTO = "Producto";
     public static final String USERINFO = "userInfo";
-    public static final String FAVORITOS_IDS = "favoritosIds";
+    public static final String FAVORITOS_LIST = "favoritosList";
 
     private TextView nombreUsuarioNavigationView;
 
@@ -240,6 +242,8 @@ public class MainActivity extends AppCompatActivity implements FragmentListadoPr
         switch (item.getItemId()) {
             case R.id.appBarFavoritosButton:
 
+            if(firebaseUser != null) {
+
                 fragmentFavoritos = new FragmentFavoritos();
                 db.collection(USERINFO)
                         .document(mAuth.getCurrentUser().getUid())
@@ -270,7 +274,9 @@ public class MainActivity extends AppCompatActivity implements FragmentListadoPr
                         Toast.makeText(MainActivity.this, "Algo salio mal con el import de favoritos", Toast.LENGTH_SHORT).show();
                     }
                 });
-
+            } else {
+                Toast.makeText(this, "Accede a tu cuenta para acceder a favoritos", Toast.LENGTH_SHORT).show();
+            }
 
                 break;
 
@@ -314,7 +320,7 @@ public class MainActivity extends AppCompatActivity implements FragmentListadoPr
         binding.drawerLayout.closeDrawers();
 
         firebaseUser = mAuth.getCurrentUser();
-
+        getAndSetFragmentMiCuentaConUserInfo();
         updateUIFirebase(firebaseUser);
 
     }
@@ -341,10 +347,10 @@ public class MainActivity extends AppCompatActivity implements FragmentListadoPr
     }
 
     @Override
-    public void onClickAgregarFavoritos(String productoId) {
+    public void onClickAgregarFavoritos(final Producto producto) {
         db.collection(MainActivity.USERINFO)
                 .document(firebaseUser.getUid())
-                .update(FAVORITOS_IDS, FieldValue.arrayUnion(productoId))
+                .update(FAVORITOS_LIST, FieldValue.arrayUnion(producto))
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
@@ -356,6 +362,7 @@ public class MainActivity extends AppCompatActivity implements FragmentListadoPr
                 Toast.makeText(MainActivity.this, "Salio mal agregar favorito", Toast.LENGTH_SHORT).show();
             }
         });
+
 
 
     }
@@ -414,6 +421,7 @@ public class MainActivity extends AppCompatActivity implements FragmentListadoPr
 
                             firebaseUser = mAuth.getCurrentUser();
 
+                            getAndSetFragmentMiCuentaConUserInfo();
                             updateUIFirebase(firebaseUser);
                         } else {
                             Toast.makeText(MainActivity.this, "Authentication failed.",
@@ -431,7 +439,6 @@ public class MainActivity extends AppCompatActivity implements FragmentListadoPr
 
             Toast.makeText(MainActivity.this, "Se logueo usuario de Firebase", Toast.LENGTH_SHORT).show();
 
-            getAndSetFragmentMiCuentaConUserInfo();
 
         } else {
 

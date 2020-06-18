@@ -27,7 +27,6 @@ public class ProductoAdapter extends RecyclerView.Adapter<ProductoAdapter.Produc
     private List<Producto> listaDeProductos;
     private ProductoAdapterListener productoAdapterListener;
     private ProductoController productoController;
-    private CeldaProductoBinding binding;
 
 
     public ProductoAdapter(List<Producto> listaDeProductos, ProductoAdapterListener listener) {
@@ -39,11 +38,15 @@ public class ProductoAdapter extends RecyclerView.Adapter<ProductoAdapter.Produc
     @NonNull
     @Override
     public ProductoViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        // binding = CeldaProductoBinding.inflate(get);
-        LayoutInflater infladorLayout = LayoutInflater.from(parent.getContext());
-        View celdaView = infladorLayout.inflate(R.layout.celda_producto, parent, false);
 
-        return new ProductoViewHolder(celdaView);
+        LayoutInflater infladorLayout = LayoutInflater.from(parent.getContext());
+
+        CeldaProductoBinding binding = CeldaProductoBinding.inflate(infladorLayout, parent, false);
+
+
+        //View celdaView = infladorLayout.inflate(R.layout.celda_producto, parent, false);
+
+        return new ProductoViewHolder(binding);
     }
 
     @Override
@@ -65,20 +68,21 @@ public class ProductoAdapter extends RecyclerView.Adapter<ProductoAdapter.Produc
 
     protected class ProductoViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView nombreProducto;
+      /*  private TextView nombreProducto;
         private TextView precioProducto;
         private ImageView fotoProducto;
         private TextView ubicacionProducto;
+      */  private CeldaProductoBinding binding;
 
+        public ProductoViewHolder(CeldaProductoBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
 
-        public ProductoViewHolder(@NonNull View itemView) {
-            super(itemView);
-
-            nombreProducto = itemView.findViewById(R.id.celdaArticuloTextViewArticulo);
+           /* nombreProducto = itemView.findViewById(R.id.celdaArticuloTextViewArticulo);
             precioProducto = itemView.findViewById(R.id.celdaArticuloTextViewPrecio);
             fotoProducto = itemView.findViewById(R.id.celdaArticuloImageViewFoto);
             ubicacionProducto = itemView.findViewById(R.id.celdaArticuloTextViewUbicacion);
-
+*/
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -97,21 +101,21 @@ public class ProductoAdapter extends RecyclerView.Adapter<ProductoAdapter.Produc
                 @Override
                 public void onFinish(Producto result) {
                     Producto producto = result;
-                    Glide.with(fotoProducto.getContext())
+                    Glide.with(binding.celdaArticuloImageViewFoto.getContext())
                             .load(producto.getPictures().get(0).getSecureUrl())
-                            .into(fotoProducto);
+                            .into(binding.celdaArticuloImageViewFoto);
 
 
                 }
             });
 
-            ubicacionProducto.setText(unProducto.getSellerAdress().getCity().getNombreCity());
+           binding.celdaArticuloTextViewUbicacion.setText(unProducto.getSellerAdress().getCity().getNombreCity());
 
             NumberFormat formatt = new DecimalFormat("###,###,###.##");
             String precioString = formatt.format(unProducto.getPrice());
 
-            precioProducto.setText(precioString);
-            nombreProducto.setText(unProducto.getTitle());
+            binding.celdaArticuloTextViewPrecio.setText(precioString);
+            binding.celdaArticuloTextViewArticulo.setText(unProducto.getTitle());
         }
 
 
@@ -135,4 +139,7 @@ public class ProductoAdapter extends RecyclerView.Adapter<ProductoAdapter.Produc
     }
 
 
+    public List<Producto> getListaDeProductos() {
+        return listaDeProductos;
+    }
 }

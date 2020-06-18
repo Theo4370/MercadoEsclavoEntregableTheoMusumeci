@@ -93,8 +93,12 @@ public class FragmentDetails extends Fragment {
         binding.detailsFavoritos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                fragmentDetailsListener.onClickAgregarFavoritos(producto.getId());
+                productoController.getProductoById(producto.getId(), new ResultListener<Producto>() {
+                    @Override
+                    public void onFinish(Producto result) {
+                        fragmentDetailsListener.onClickAgregarFavoritos(result);
+                    }
+                });
 
 
             }
@@ -163,7 +167,7 @@ public class FragmentDetails extends Fragment {
     public interface FragmentDetailsListener {
         public void onClickAbrirMaps(Producto producto);
 
-        public void onClickAgregarFavoritos(String productoId);
+        public void onClickAgregarFavoritos(Producto producto);
     }
 
 }

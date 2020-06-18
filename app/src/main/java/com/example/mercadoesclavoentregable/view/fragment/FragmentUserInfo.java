@@ -15,12 +15,15 @@ import android.widget.Toast;
 
 import com.example.mercadoesclavoentregable.R;
 import com.example.mercadoesclavoentregable.databinding.FragmentUserInfoBinding;
+import com.example.mercadoesclavoentregable.model.Producto;
 import com.example.mercadoesclavoentregable.model.UserInfo;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.List;
 
 
 public class FragmentUserInfo extends Fragment {
@@ -63,7 +66,10 @@ public class FragmentUserInfo extends Fragment {
             @Override
             public void onClick(View v) {
 
-                UserInfo userInfo = new UserInfo(binding.editTextNombreCompleto.getText().toString(), binding.editTextApodo.getText().toString(), binding.editTextEdad.getText().toString(), binding.editTextCiudad.getText().toString(), null);
+                UserInfo userInfo = new UserInfo(binding.editTextNombreCompleto.getText().toString(),
+                        binding.editTextApodo.getText().toString(),
+                        binding.editTextEdad.getText().toString(),
+                        binding.editTextCiudad.getText().toString(), null);
                 agregarUserInfoAFirestone(userInfo);
 
                 fragmentUserInfoListener.onClickFinalizarUserInfo();
