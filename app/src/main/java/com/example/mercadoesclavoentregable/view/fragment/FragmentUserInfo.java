@@ -61,19 +61,23 @@ public class FragmentUserInfo extends Fragment {
         db = FirebaseFirestore.getInstance();
 
 
-
         binding.botonFirebaseFirestore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (binding.editTextNombreCompleto.getText() != null
+                        && binding.editTextApodo.getText() != null
+                        && binding.editTextEdad.getText() != null
+                        && binding.editTextCiudad.getText() != null) {
 
-                UserInfo userInfo = new UserInfo(binding.editTextNombreCompleto.getText().toString(),
-                        binding.editTextApodo.getText().toString(),
-                        binding.editTextEdad.getText().toString(),
-                        binding.editTextCiudad.getText().toString(), null);
-                agregarUserInfoAFirestone(userInfo);
+                    UserInfo userInfo = new UserInfo(binding.editTextNombreCompleto.getText().toString(),
+                            binding.editTextApodo.getText().toString(),
+                            binding.editTextEdad.getText().toString(),
+                            binding.editTextCiudad.getText().toString(), null);
+                    agregarUserInfoAFirestone(userInfo);
 
-                fragmentUserInfoListener.onClickFinalizarUserInfo();
-
+                    fragmentUserInfoListener.onClickFinalizarUserInfo();
+                } else {}
+                Toast.makeText(getActivity(), "Complete todos los campos", Toast.LENGTH_SHORT).show();
             }
         });
 

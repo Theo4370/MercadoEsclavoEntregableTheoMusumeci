@@ -242,41 +242,14 @@ public class MainActivity extends AppCompatActivity implements FragmentListadoPr
         switch (item.getItemId()) {
             case R.id.appBarFavoritosButton:
 
-            if(firebaseUser != null) {
+                if (mAuth.getCurrentUser() != null) {
 
-                fragmentFavoritos = new FragmentFavoritos();
-                db.collection(USERINFO)
-                        .document(mAuth.getCurrentUser().getUid())
-                        .get()
-                        .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                            @Override
-                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    fragmentFavoritos = new FragmentFavoritos();
+                    pegarFragment(fragmentFavoritos);
 
-                                UserInfo userInfo = documentSnapshot.toObject(UserInfo.class);
-
-                                if (userInfo != null) {
-
-                                    Bundle bundle = new Bundle();
-                                    bundle.putSerializable(USERINFO, userInfo);
-
-                                    fragmentFavoritos.setArguments(bundle);
-                                    pegarFragment(fragmentFavoritos);
-
-
-                                } else {
-                                    Toast.makeText(MainActivity.this, "Algo salio mal al cargar tus favoritos", Toast.LENGTH_SHORT).show();
-
-                                }
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(MainActivity.this, "Algo salio mal con el import de favoritos", Toast.LENGTH_SHORT).show();
-                    }
-                });
-            } else {
-                Toast.makeText(this, "Accede a tu cuenta para acceder a favoritos", Toast.LENGTH_SHORT).show();
-            }
+                } else {
+                    Toast.makeText(this, "Accede a tu cuenta para tener favoritos", Toast.LENGTH_SHORT).show();
+                }
 
                 break;
 
@@ -348,21 +321,25 @@ public class MainActivity extends AppCompatActivity implements FragmentListadoPr
 
     @Override
     public void onClickAgregarFavoritos(final Producto producto) {
-        db.collection(MainActivity.USERINFO)
-                .document(firebaseUser.getUid())
-                .update(FAVORITOS_LIST, FieldValue.arrayUnion(producto))
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Toast.makeText(MainActivity.this, "Agregado a favoritos", Toast.LENGTH_SHORT).show();
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(MainActivity.this, "Salio mal agregar favorito", Toast.LENGTH_SHORT).show();
-            }
-        });
 
+        if (mAuth.getCurrentUser() != null) {
+            db.collection(MainActivity.USERINFO)
+                    .document(firebaseUser.getUid())
+                    .update(FAVORITOS_LIST, FieldValue.arrayUnion(producto))
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Toast.makeText(MainActivity.this, "Agregado a favoritos", Toast.LENGTH_SHORT).show();
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(MainActivity.this, "Salio mal agregar favorito", Toast.LENGTH_SHORT).show();
+                }
+            });
+        } else {
+            Toast.makeText(this, "Accede a tu cuenta para agregar favoritos", Toast.LENGTH_SHORT).show();
+        }
 
 
     }
@@ -413,24 +390,24 @@ public class MainActivity extends AppCompatActivity implements FragmentListadoPr
     private void singInFirebase(String mail, String password) {
 
 
-        mAuth.signInWithEmailAndPassword(mail, password)
-                .addOnCompleteListener(MainActivity.this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
+            mAuth.signInWithEmailAndPassword(mail, password)
+                    .addOnCompleteListener(MainActivity.this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
 
-                            firebaseUser = mAuth.getCurrentUser();
+                                firebaseUser = mAuth.getCurrentUser();
 
-                            getAndSetFragmentMiCuentaConUserInfo();
-                            updateUIFirebase(firebaseUser);
-                        } else {
-                            Toast.makeText(MainActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
-                            //updateUIFirebase(null);
+                                getAndSetFragmentMiCuentaConUserInfo();
+                                updateUIFirebase(firebaseUser);
+                            } else {
+                                Toast.makeText(MainActivity.this, "Authentication failed.",
+                                        Toast.LENGTH_SHORT).show();
+                                //updateUIFirebase(null);
 
+                            }
                         }
-                    }
-                });
+                    });
 
     }
 

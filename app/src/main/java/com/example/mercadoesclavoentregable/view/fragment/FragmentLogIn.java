@@ -91,15 +91,23 @@ public class FragmentLogIn extends Fragment implements View.OnClickListener {
         switch (v.getId()) {
 
             case R.id.botonLogIn:
-                fragmentLogInListener.onClickSingInFirebase(binding.editTextMail.getText().toString(), binding.editTextContrasena.getText().toString());
+                if(binding.editTextMail.getText() != null && binding.editTextContrasena.getText() != null) {
+
+                    fragmentLogInListener.onClickSingInFirebase(binding.editTextMail.getText().toString(), binding.editTextContrasena.getText().toString());
+
+                } else {
+                    Toast.makeText(getActivity(), "No deje campos vacios", Toast.LENGTH_SHORT).show();
+                }
 
                 break;
             case R.id.botonRegisterGoogle:
+
                 fragmentLogInListener.onClickSingInGoogle();
 
                 break;
 
             case R.id.textViewRegistrarse:
+
                 fragmentLogInListener.onClickBotonCrearCuenta();
 
                 break;

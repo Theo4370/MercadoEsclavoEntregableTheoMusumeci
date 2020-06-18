@@ -44,7 +44,6 @@ public class ProductoAdapter extends RecyclerView.Adapter<ProductoAdapter.Produc
         CeldaProductoBinding binding = CeldaProductoBinding.inflate(infladorLayout, parent, false);
 
 
-        //View celdaView = infladorLayout.inflate(R.layout.celda_producto, parent, false);
 
         return new ProductoViewHolder(binding);
     }
@@ -68,21 +67,13 @@ public class ProductoAdapter extends RecyclerView.Adapter<ProductoAdapter.Produc
 
     protected class ProductoViewHolder extends RecyclerView.ViewHolder {
 
-      /*  private TextView nombreProducto;
-        private TextView precioProducto;
-        private ImageView fotoProducto;
-        private TextView ubicacionProducto;
-      */  private CeldaProductoBinding binding;
+ private CeldaProductoBinding binding;
 
         public ProductoViewHolder(CeldaProductoBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
 
-           /* nombreProducto = itemView.findViewById(R.id.celdaArticuloTextViewArticulo);
-            precioProducto = itemView.findViewById(R.id.celdaArticuloTextViewPrecio);
-            fotoProducto = itemView.findViewById(R.id.celdaArticuloImageViewFoto);
-            ubicacionProducto = itemView.findViewById(R.id.celdaArticuloTextViewUbicacion);
-*/
+
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

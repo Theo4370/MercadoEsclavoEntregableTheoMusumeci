@@ -23,7 +23,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 
-
 public class FragmentRegister extends Fragment {
 
     private FragmentRegisterBinding binding;
@@ -56,20 +55,20 @@ public class FragmentRegister extends Fragment {
         db = FirebaseFirestore.getInstance();
 
 
-
         binding.botonRegisterFirebase.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                fragmentRegisterListener.onClickBotonFinalizarRegister(binding.editTextMailRegister.getText().toString(), binding.editTextContrasenaRegister.getText().toString());
-
+                if (binding.editTextMailRegister.getText() != null && binding.editTextContrasenaRegister.getText() != null) {
+                    fragmentRegisterListener.onClickBotonFinalizarRegister(binding.editTextMailRegister.getText().toString(), binding.editTextContrasenaRegister.getText().toString());
+                } else {
+                    Toast.makeText(getActivity(), "Complete todos los campos", Toast.LENGTH_SHORT).show();
+                }
 
             }
         });
 
         return view;
     }
-
 
 
     public interface FragmentRegisterListener {
