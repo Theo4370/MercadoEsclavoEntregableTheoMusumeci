@@ -5,11 +5,13 @@
     android:layout_height="match_parent"
     tools:context=".view.fragment.AboutUsFragment">
 
-    <!-- TODO: Update blank fragment layout -->
+
     <TextView
+        android:layout_marginTop="40dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Sobre la empresa"
+        android:textSize="30dp"
+        android:text="Somos una pequeña empresa dedidada a hacer una modesta copia de mercado libre. Aun no es posible comprar, pero sea paciente!"
         android:gravity="center"/>
 
 </LinearLayout>

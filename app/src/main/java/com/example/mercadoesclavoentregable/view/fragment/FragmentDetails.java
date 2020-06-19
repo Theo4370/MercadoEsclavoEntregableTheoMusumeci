@@ -1,31 +1,24 @@
 package com.example.mercadoesclavoentregable.view.fragment;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import com.bumptech.glide.Glide;
 import com.example.mercadoesclavoentregable.MainActivity;
-import com.example.mercadoesclavoentregable.R;
 import com.example.mercadoesclavoentregable.controller.ProductoController;
 import com.example.mercadoesclavoentregable.databinding.FragmentDetailsBinding;
 import com.example.mercadoesclavoentregable.model.Producto;
 import com.example.mercadoesclavoentregable.util.ResultListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.material.textview.MaterialTextView;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.FieldValue;
-import com.google.firebase.firestore.FirebaseFirestore;
+import com.example.mercadoesclavoentregable.view.adapter.SliderAdapter;
+import com.smarteist.autoimageslider.SliderAnimations;
+import com.smarteist.autoimageslider.SliderView;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -35,11 +28,11 @@ import java.util.ArrayList;
 public class FragmentDetails extends Fragment {
 
 
-
     private FragmentDetailsBinding binding;
     private Producto producto;
     private ProductoController productoController;
     private FragmentDetailsListener fragmentDetailsListener;
+    private SliderAdapter sliderAdapter;
 
 
     @Override
@@ -104,7 +97,7 @@ public class FragmentDetails extends Fragment {
      */
     private void getAndSetViews() {
         getAndSetDescripcionProducto(producto, binding.detailsProductoDescripcion);
-        getAndSetFotoProducto(producto, binding.detailsProductoImagen);
+        getAndSetFotoProducto(producto);
         binding.detailsProductoTextView.setText(producto.getTitle());
         binding.detailsProductoCondition.setText(producto.getCondition());
         binding.detailsProductoUbicacion.setText(producto.getSellerAdress().getCity().getNombreCity());
@@ -117,22 +110,27 @@ public class FragmentDetails extends Fragment {
     }
 
     /**
-     * Hace el pedido a internet del producto por ID, pido la foto del producto y la seteo.
+     * Hace el pedido a internet del producto por ID, pido la lista de fotos y las seteo al SliderAdapter.
      * POR AHORA HAGO EL PEDIDO DE NUEVO (YA LA TENGO DEL ONBIND DEL ADAPTER, PODRIA TRAERLA DE AHI) PARA LUEGO AGREGAR SLIDEVIEW.
      */
-    private void getAndSetFotoProducto(Producto producto, final ImageView imageViewProducto) {
-        productoController = new ProductoController();
+    private void getAndSetFotoProducto(Producto producto) {
+
         productoController.getProductoById(producto.getId(), new ResultListener<Producto>() {
             @Override
             public void onFinish(Producto result) {
-                Producto producto = result;
-                Glide.with(getContext())
-                        .load(producto.getPictures().get(0).getSecureUrl())
-                        .into(imageViewProducto);
 
-
+                sliderAdapter = new SliderAdapter(result.getPictures());
+                binding.detailsProductoImagen.setSliderAdapter(sliderAdapter);
+                binding.detailsProductoImagen.setSliderTransformAnimation(SliderAnimations.SIMPLETRANSFORMATION);
+                binding.detailsProductoImagen.setAutoCycleDirection(SliderView.AUTO_CYCLE_DIRECTION_BACK_AND_FORTH);
+                binding.detailsProductoImagen.setIndicatorSelectedColor(Color.WHITE);
+                binding.detailsProductoImagen.setIndicatorUnselectedColor(Color.GRAY);
+                binding.detailsProductoImagen.setScrollTimeInSec(4);
+                binding.detailsProductoImagen.startAutoCycle();
             }
         });
+
+
     }
 
     /**

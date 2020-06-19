@@ -44,7 +44,6 @@ public class ProductoAdapter extends RecyclerView.Adapter<ProductoAdapter.Produc
         CeldaProductoBinding binding = CeldaProductoBinding.inflate(infladorLayout, parent, false);
 
 
-
         return new ProductoViewHolder(binding);
     }
 
@@ -67,7 +66,7 @@ public class ProductoAdapter extends RecyclerView.Adapter<ProductoAdapter.Produc
 
     protected class ProductoViewHolder extends RecyclerView.ViewHolder {
 
- private CeldaProductoBinding binding;
+        private CeldaProductoBinding binding;
 
         public ProductoViewHolder(CeldaProductoBinding binding) {
             super(binding.getRoot());
@@ -86,7 +85,7 @@ public class ProductoAdapter extends RecyclerView.Adapter<ProductoAdapter.Produc
 
         public void onBind(Producto unProducto) {
 
-            //Hago un pedido nuevo de la foto de cada producto
+            //Hago un pedido nuevo de la foto de cada producto porque el thumbnail no funciona bien
             productoController = new ProductoController();
             productoController.getProductoById(unProducto.getId(), new ResultListener<Producto>() {
                 @Override
@@ -100,7 +99,7 @@ public class ProductoAdapter extends RecyclerView.Adapter<ProductoAdapter.Produc
                 }
             });
 
-           binding.celdaArticuloTextViewUbicacion.setText(unProducto.getSellerAdress().getCity().getNombreCity());
+            binding.celdaArticuloTextViewUbicacion.setText(unProducto.getSellerAdress().getCity().getNombreCity());
 
             NumberFormat formatt = new DecimalFormat("###,###,###.##");
             String precioString = formatt.format(unProducto.getPrice());

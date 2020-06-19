@@ -146,6 +146,7 @@ public class MainActivity extends AppCompatActivity implements FragmentListadoPr
                             getAndSetFragmentMiCuentaConUserInfo();
 
                         } else {
+                            binding.toolBar.setTitle("Iniciar sesion");
                             FragmentLogIn fragmentLogIn = new FragmentLogIn();
                             pegarFragment(fragmentLogIn);
 
