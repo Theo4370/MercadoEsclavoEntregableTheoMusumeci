@@ -91,7 +91,11 @@ public class FragmentLogIn extends Fragment implements View.OnClickListener {
         switch (v.getId()) {
 
             case R.id.botonLogIn:
-                if(binding.editTextMail.getText() != null && binding.editTextContrasena.getText() != null) {
+                //No pude hacer que .toString() != null me funcione en el if
+              Integer textoMailIngresado = binding.editTextMail.getText().length();
+              Integer textoContrasenaIngresada = binding.editTextContrasena.getText().length();
+
+                if(textoMailIngresado != 0 && textoContrasenaIngresada != 0) {
 
                     fragmentLogInListener.onClickSingInFirebase(binding.editTextMail.getText().toString(), binding.editTextContrasena.getText().toString());
 

@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements FragmentListadoPr
     public static final String USERINFO = "userInfo";
     public static final String FAVORITOS_LIST = "favoritosList";
 
-    private TextView nombreUsuarioNavigationView;
+    public TextView nombreUsuarioNavigationView;
 
 
     private FragmentListadoProductos fragmentListadoProductos;
@@ -86,16 +86,13 @@ public class MainActivity extends AppCompatActivity implements FragmentListadoPr
         View view = binding.getRoot();
         setContentView(view);
 
-
         mAuth = FirebaseAuth.getInstance();
         firebaseUser = mAuth.getCurrentUser();
         db = FirebaseFirestore.getInstance();
 
-
         navigationView();
         toolBar();
         getAndSetProductosAlRecycler();
-
 
     }
 
@@ -140,6 +137,7 @@ public class MainActivity extends AppCompatActivity implements FragmentListadoPr
                 switch (item.getItemId()) {
                     case R.id.menuInicio:
                         getAndSetProductosAlRecycler();
+                        binding.toolBar.setTitle("Inicio");
                         binding.drawerLayout.closeDrawers();
                         break;
                     case R.id.menuPerfil:
@@ -159,6 +157,7 @@ public class MainActivity extends AppCompatActivity implements FragmentListadoPr
                     case R.id.menuAboutUs:
                         AboutUsFragment aboutUsFragment = new AboutUsFragment();
                         pegarFragment(aboutUsFragment);
+                        binding.toolBar.setTitle("Sobre nosotros");
                         binding.drawerLayout.closeDrawers();
 
 
@@ -173,7 +172,9 @@ public class MainActivity extends AppCompatActivity implements FragmentListadoPr
         });
     }
 
-
+    /**
+     * Metodo para pegar fragments al contenedor principal
+     */
     private void pegarFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -187,8 +188,10 @@ public class MainActivity extends AppCompatActivity implements FragmentListadoPr
     public void onBackPressed() {
         if (getSupportFragmentManager().getBackStackEntryCount() == 1) {
             finish();
+
         } else {
             super.onBackPressed();
+            binding.toolBar.setTitle("...");
         }
 
     }
@@ -207,6 +210,7 @@ public class MainActivity extends AppCompatActivity implements FragmentListadoPr
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
+                binding.toolBar.setTitle(query);
                 productoController = new ProductoController();
                 fragmentListadoProductos = new FragmentListadoProductos();
                 productoController.getProductoPorSearchPaginado(query, new ResultListener<ProductoContainer>() {
@@ -243,7 +247,7 @@ public class MainActivity extends AppCompatActivity implements FragmentListadoPr
             case R.id.appBarFavoritosButton:
 
                 if (mAuth.getCurrentUser() != null) {
-
+                    binding.toolBar.setTitle("Favoritos");
                     fragmentFavoritos = new FragmentFavoritos();
                     pegarFragment(fragmentFavoritos);
 
@@ -259,7 +263,7 @@ public class MainActivity extends AppCompatActivity implements FragmentListadoPr
 
 
     /**
-     * Interfaces
+     * Interfaces de los fragments
      * */
 
     /**
@@ -270,23 +274,48 @@ public class MainActivity extends AppCompatActivity implements FragmentListadoPr
 
         Bundle bundle = new Bundle();
         bundle.putSerializable(PRODUCTO, producto);
+        binding.toolBar.setTitle("Producto");
         FragmentDetails fragmentDetails = new FragmentDetails();
         fragmentDetails.setArguments(bundle);
         pegarFragment(fragmentDetails);
 
     }
 
-    @Override
-    public void onClickBotonCrearCuenta() {
-        pegarFragment(new FragmentRegister());
-    }
-
+    /**
+     * FragmentLogIn
+     */
     @Override
     public void onClickSingInFirebase(String mail, String password) {
         singInFirebase(mail, password);
 
     }
 
+    @Override
+    public void onClickSingInGoogle() {
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .requestProfile()
+                .build();
+
+        client = GoogleSignIn.getClient(MainActivity.this, gso);
+
+
+        Intent signInIntent = client.getSignInIntent();
+        startActivityForResult(signInIntent, RC_SIGN_IN_GOOGLE);
+
+    }
+
+    @Override
+    public void onClickBotonCrearCuenta() {
+        binding.toolBar.setTitle("Crear Usuario");
+        pegarFragment(new FragmentRegister());
+    }
+
+
+    /**
+     * FragmentUserInfo
+     */
     @Override
     public void onClickFinalizarUserInfo() {
 
@@ -298,12 +327,18 @@ public class MainActivity extends AppCompatActivity implements FragmentListadoPr
 
     }
 
+    /**
+     * Fragment Register
+     */
     @Override
     public void onClickBotonFinalizarRegister(String mail, String password) {
         crearUsuarioFirebase(mail, password);
 
     }
 
+    /**
+     * FragmentMiCuenta
+     */
     @Override
     public void onClickBotonLogOutFirebase() {
 
@@ -312,13 +347,18 @@ public class MainActivity extends AppCompatActivity implements FragmentListadoPr
         //updateUIFirebase(null);
         FragmentLogIn fragmentLogIn = new FragmentLogIn();
         pegarFragment(fragmentLogIn);
+        binding.toolBar.setTitle("Iniciar Sesion");
         binding.drawerLayout.closeDrawers();
 
-        nombreUsuarioNavigationView.setText("MercadoEsclavo");
+        nombreUsuarioNavigationView.setText("M.Esclavo");
 
 
     }
 
+
+    /**
+     * FragmentDetails
+     */
     @Override
     public void onClickAgregarFavoritos(final Producto producto) {
 
@@ -344,12 +384,24 @@ public class MainActivity extends AppCompatActivity implements FragmentListadoPr
 
     }
 
+    @Override
+    public void onClickAbrirMaps(Producto producto) {
+        Intent intent = new Intent(MainActivity.this, MapsActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(MainActivity.PRODUCTO, producto);
+
+
+        intent.putExtras(bundle);
+        startActivity(intent);
+    }
+
 
     /**
      * Metodos de firebase
-     * EL METODO PARA AGREGAR INFO ESTA EN FRAGMENTUSERINFO
+     * EL METODO PARA AGREGAR INFO A FIREBASE QUEDO EN FRAGMENTUSERINFO
      */
     public void getAndSetFragmentMiCuentaConUserInfo() {
+        binding.toolBar.setTitle("Perfil");
 
         db.collection(USERINFO)
                 .document(mAuth.getCurrentUser().getUid())
@@ -390,24 +442,24 @@ public class MainActivity extends AppCompatActivity implements FragmentListadoPr
     private void singInFirebase(String mail, String password) {
 
 
-            mAuth.signInWithEmailAndPassword(mail, password)
-                    .addOnCompleteListener(MainActivity.this, new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()) {
+        mAuth.signInWithEmailAndPassword(mail, password)
+                .addOnCompleteListener(MainActivity.this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
 
-                                firebaseUser = mAuth.getCurrentUser();
+                            firebaseUser = mAuth.getCurrentUser();
 
-                                getAndSetFragmentMiCuentaConUserInfo();
-                                updateUIFirebase(firebaseUser);
-                            } else {
-                                Toast.makeText(MainActivity.this, "Authentication failed.",
-                                        Toast.LENGTH_SHORT).show();
-                                //updateUIFirebase(null);
+                            getAndSetFragmentMiCuentaConUserInfo();
+                            updateUIFirebase(firebaseUser);
+                        } else {
+                            Toast.makeText(MainActivity.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                            //updateUIFirebase(null);
 
-                            }
                         }
-                    });
+                    }
+                });
 
     }
 
@@ -435,7 +487,7 @@ public class MainActivity extends AppCompatActivity implements FragmentListadoPr
                                     Toast.LENGTH_SHORT).show();
 
                             FirebaseUser currentUser = mAuth.getCurrentUser();
-
+                            binding.toolBar.setTitle("Informacion extra");
                             pegarFragment(new FragmentUserInfo());
                             //updateUIFirebase(currentUser);
 
@@ -455,23 +507,6 @@ public class MainActivity extends AppCompatActivity implements FragmentListadoPr
     /**
      * Configuracion google
      */
-
-    @Override
-    public void onClickSingInGoogle() {
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .requestProfile()
-                .build();
-
-        client = GoogleSignIn.getClient(MainActivity.this, gso);
-
-
-        Intent signInIntent = client.getSignInIntent();
-        startActivityForResult(signInIntent, RC_SIGN_IN_GOOGLE);
-
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -548,17 +583,6 @@ public class MainActivity extends AppCompatActivity implements FragmentListadoPr
 
         }
 
-    }
-
-    @Override
-    public void onClickAbrirMaps(Producto producto) {
-        Intent intent = new Intent(MainActivity.this, MapsActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putSerializable(MainActivity.PRODUCTO, producto);
-
-
-        intent.putExtras(bundle);
-        startActivity(intent);
     }
 
 

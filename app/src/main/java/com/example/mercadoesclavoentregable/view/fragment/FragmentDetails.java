@@ -31,20 +31,12 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 
-/**
- * A simple {@link Fragment} subclass.
- */
+
 public class FragmentDetails extends Fragment {
 
-    private ImageView imageViewProducto;
-    private TextView textViewProducto;
-    private TextView textViewDescripcion;
-    private MaterialTextView textViewPrecio;
-    private MaterialTextView textViewAbrirMaps;
-    private MaterialTextView textViewFavotirosButtom;
+
 
     private FragmentDetailsBinding binding;
-
     private Producto producto;
     private ProductoController productoController;
     private FragmentDetailsListener fragmentDetailsListener;
@@ -80,8 +72,7 @@ public class FragmentDetails extends Fragment {
                 productoController.getProductoById(producto.getId(), new ResultListener<Producto>() {
                     @Override
                     public void onFinish(Producto result) {
-                        Producto producto1 = result;
-                        fragmentDetailsListener.onClickAbrirMaps(producto1);
+                        fragmentDetailsListener.onClickAbrirMaps(result);
                     }
                 });
 
@@ -115,6 +106,8 @@ public class FragmentDetails extends Fragment {
         getAndSetDescripcionProducto(producto, binding.detailsProductoDescripcion);
         getAndSetFotoProducto(producto, binding.detailsProductoImagen);
         binding.detailsProductoTextView.setText(producto.getTitle());
+        binding.detailsProductoCondition.setText(producto.getCondition());
+        binding.detailsProductoUbicacion.setText(producto.getSellerAdress().getCity().getNombreCity());
 
         NumberFormat formatt = new DecimalFormat("###,###,###.##");
         String precioString = formatt.format(producto.getPrice());

@@ -42,19 +42,11 @@ public class FragmentFavoritos extends Fragment implements ProductoAdapter.Produ
 
     private ProductoAdapter productoAdapter;
     private List<Producto> favoritosList;
-
     private FragmentFavoritosListener fragmentFavoritosListener;
-    private ProductoController productoController;
-
     private FirebaseAuth mAuth;
-    private FirebaseUser firebaseUser;
     private FirebaseFirestore db;
     private UserInfo userInfo;
-
-
     private FragmentFavoritosBinding binding;
-
-
     private Producto deletedProducto = null;
 
     @Override
@@ -88,6 +80,10 @@ public class FragmentFavoritos extends Fragment implements ProductoAdapter.Produ
     }
 
 
+    /**
+     * Metodos drag and drop y swipe
+     */
+
     ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN |
             ItemTouchHelper.START |
             ItemTouchHelper.END,
@@ -103,7 +99,7 @@ public class FragmentFavoritos extends Fragment implements ProductoAdapter.Produ
             db.collection(MainActivity.USERINFO).document(mAuth.getCurrentUser().getUid()).set(userInfo).addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
-                    Toast.makeText(getActivity(), "Procuto reacomodado", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Lista reacomodado", Toast.LENGTH_SHORT).show();
 
                 }
             }).addOnFailureListener(new OnFailureListener() {
@@ -160,53 +156,54 @@ public class FragmentFavoritos extends Fragment implements ProductoAdapter.Produ
             });
 
 
-
         }
     };
 
+    /**
+     * Se hace el pedido de los datos del usuaio y se setea al adapter con la lista de favoritos
+     */
 
     public void getFavoritosDeFirebase() {
 
-            db.collection(MainActivity.USERINFO)
-                    .document(mAuth.getCurrentUser().getUid())
-                    .get()
-                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                        @Override
-                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+        db.collection(MainActivity.USERINFO)
+                .document(mAuth.getCurrentUser().getUid())
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
 
-                            userInfo = documentSnapshot.toObject(UserInfo.class);
+                        userInfo = documentSnapshot.toObject(UserInfo.class);
 
-                            if (userInfo != null) {
+                        if (userInfo.getFavoritosList() != null) {
 
-                                favoritosList = userInfo.getFavoritosList();
-
-
-                                productoAdapter = new ProductoAdapter(favoritosList, new ProductoAdapter.ProductoAdapterListener() {
-                                    @Override
-                                    public void onClickProductoAdapterListener(Producto producto) {
-                                        fragmentFavoritosListener.onClick(producto);
-                                    }
-                                });
+                            favoritosList = userInfo.getFavoritosList();
 
 
-                                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+                            productoAdapter = new ProductoAdapter(favoritosList, new ProductoAdapter.ProductoAdapterListener() {
+                                @Override
+                                public void onClickProductoAdapterListener(Producto producto) {
+                                    fragmentFavoritosListener.onClick(producto);
+                                }
+                            });
 
-                                binding.fragmentFavoritosRecyclerView.setLayoutManager(linearLayoutManager);
-                                binding.fragmentFavoritosRecyclerView.setAdapter(productoAdapter);
+
+                            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+
+                            binding.fragmentFavoritosRecyclerView.setLayoutManager(linearLayoutManager);
+                            binding.fragmentFavoritosRecyclerView.setAdapter(productoAdapter);
 
 
-                            } else {
-                                Toast.makeText(getActivity(), "Algo salio mal al cargar tus favoritos", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(getActivity(), "Aun no tienes favoritos", Toast.LENGTH_SHORT).show();
 
-                            }
                         }
-                    }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(getActivity(), "Algo salio mal con el import de favoritos", Toast.LENGTH_SHORT).show();
-                }
-            });
-
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(getActivity(), "Algo salio mal con el import de favoritos", Toast.LENGTH_SHORT).show();
+            }
+        });
 
 
     }

@@ -73,6 +73,7 @@ public class FragmentUserInfo extends Fragment {
                             binding.editTextApodo.getText().toString(),
                             binding.editTextEdad.getText().toString(),
                             binding.editTextCiudad.getText().toString(), null);
+
                     agregarUserInfoAFirestone(userInfo);
 
                     fragmentUserInfoListener.onClickFinalizarUserInfo();

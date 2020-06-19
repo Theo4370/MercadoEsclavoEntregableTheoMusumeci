@@ -58,7 +58,12 @@ public class FragmentRegister extends Fragment {
         binding.botonRegisterFirebase.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (binding.editTextMailRegister.getText() != null && binding.editTextContrasenaRegister.getText() != null) {
+                //No pude hacer que .toString() != null me funcione en el if
+                Integer mailIngresado = binding.editTextMailRegister.getText().length();
+                Integer contrasenaIngresada = binding.editTextContrasenaRegister.getText().length();
+
+                if (mailIngresado != 0 && contrasenaIngresada != 0) {
+
                     fragmentRegisterListener.onClickBotonFinalizarRegister(binding.editTextMailRegister.getText().toString(), binding.editTextContrasenaRegister.getText().toString());
                 } else {
                     Toast.makeText(getActivity(), "Complete todos los campos", Toast.LENGTH_SHORT).show();
