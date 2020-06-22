@@ -92,7 +92,14 @@ public class MainActivity extends AppCompatActivity implements FragmentListadoPr
 
         navigationView();
         toolBar();
-        getAndSetProductosAlRecycler();
+        //getAndSetProductosAlRecycler();
+
+        FragmentListadoProductos fragmentListadoProductos = new FragmentListadoProductos();
+        Bundle bundle = new Bundle();
+        String query = "planta";
+        bundle.putString("query", query);
+        fragmentListadoProductos.setArguments(bundle);
+        pegarFragment(fragmentListadoProductos);
 
     }
 
@@ -212,9 +219,14 @@ public class MainActivity extends AppCompatActivity implements FragmentListadoPr
             @Override
             public boolean onQueryTextSubmit(String query) {
                 binding.toolBar.setTitle(query);
-                productoController = new ProductoController();
+               // productoController = new ProductoController();
                 fragmentListadoProductos = new FragmentListadoProductos();
-                productoController.getProductoPorSearchPaginado(query, new ResultListener<ProductoContainer>() {
+                Bundle bundle = new Bundle();
+                bundle.putString("query", query);
+                fragmentListadoProductos.setArguments(bundle);
+                pegarFragment(fragmentListadoProductos);
+
+                /*productoController.getProductoPorSearchPaginado(query, new ResultListener<ProductoContainer>() {
                     @Override
                     public void onFinish(ProductoContainer result) {
 
@@ -225,7 +237,7 @@ public class MainActivity extends AppCompatActivity implements FragmentListadoPr
 
                     }
                 });
-                return true;
+                */return true;
             }
 
             @Override

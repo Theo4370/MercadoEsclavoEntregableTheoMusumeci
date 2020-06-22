@@ -12,7 +12,8 @@ public class ProductoController {
     private ProductoDao productoDao;
     private Integer offset = 0;
     private Boolean hayMasProductos = true;
-    public static final Integer PAGE_SIZE = 10;
+    private static final Integer LIMIT = 10;
+    private Boolean hayPedido = false;
 
     public ProductoController() {
         this.productoDao = new ProductoDao() {
@@ -20,17 +21,18 @@ public class ProductoController {
     }
 
 
-    public void getProductoPorSearchPaginado(String producto, final ResultListener<ProductoContainer> resultListenerFromView){
-        productoDao.getProductoPorSearchPaginado(producto, offset, PAGE_SIZE, new ResultListener<ProductoContainer>() {
+    public void getProductoPorSearchPaginado(String producto, final ResultListener<ProductoContainer> resultListenerFromView) {
+        hayPedido = true;
+        productoDao.getProductoPorSearchPaginado(producto, offset, LIMIT, new ResultListener<ProductoContainer>() {
             @Override
             public void onFinish(ProductoContainer result) {
+                offset = offset + LIMIT;
 
-                if (result.getProductoList().size()<PAGE_SIZE){
-                  hayMasProductos = false;
-                } else {
-                    offset = offset + PAGE_SIZE;
-                    resultListenerFromView.onFinish(result);
+                if (result.getProductoList().size() < LIMIT) {
+                    hayMasProductos = false;
                 }
+                hayPedido = false;
+                resultListenerFromView.onFinish(result);
             }
         });
 
@@ -41,7 +43,7 @@ public class ProductoController {
         return hayMasProductos;
     }
 
-    public void getProductoById(String id, final ResultListener<Producto> resultListeneFromView){
+    public void getProductoById(String id, final ResultListener<Producto> resultListeneFromView) {
         productoDao.getProductoById(id, new ResultListener<Producto>() {
             @Override
             public void onFinish(Producto result) {
@@ -50,12 +52,16 @@ public class ProductoController {
         });
     }
 
-    public void getDescripcionProducto(String id, final ResultListener<ArrayList<Producto>> resultListenerFromView){
+    public void getDescripcionProducto(String id, final ResultListener<ArrayList<Producto>> resultListenerFromView) {
         productoDao.getDescripcionProducto(id, new ResultListener<ArrayList<Producto>>() {
             @Override
             public void onFinish(ArrayList<Producto> result) {
                 resultListenerFromView.onFinish(result);
             }
         });
+    }
+
+    public Boolean getHayPedido() {
+        return hayPedido;
     }
 }

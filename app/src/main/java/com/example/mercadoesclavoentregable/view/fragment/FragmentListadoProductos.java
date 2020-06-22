@@ -47,17 +47,27 @@ public class FragmentListadoProductos extends Fragment implements ProductoAdapte
         View view = binding.getRoot();
 
         Bundle bundle = getArguments();
-        final ProductoContainer productoContainer = (ProductoContainer) bundle.getSerializable("productos");
+        /*final ProductoContainer productoContainer = (ProductoContainer) bundle.getSerializable("productos");
         List<Producto> productoList = productoContainer.getProductoList();
-
-
+*/
+        final String query = bundle.getString("query");
         productoController = new ProductoController();
+        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        productoController.getProductoPorSearchPaginado(query, new ResultListener<ProductoContainer>() {
+            @Override
+            public void onFinish(ProductoContainer result) {
+                productoAdapter = new ProductoAdapter(result.getProductoList(), FragmentListadoProductos.this);
+                binding.fragmentListadoRecyclerView.setLayoutManager(linearLayoutManager);
+                binding.fragmentListadoRecyclerView.setAdapter(productoAdapter);
+            }
+        });
 
-        productoAdapter = new ProductoAdapter(productoList, this);
+
+       /* productoAdapter = new ProductoAdapter(productoList, this);
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
 
         binding.fragmentListadoRecyclerView.setLayoutManager(linearLayoutManager);
-        binding.fragmentListadoRecyclerView.setAdapter(productoAdapter);
+        binding.fragmentListadoRecyclerView.setAdapter(productoAdapter);*/
 
         binding.fragmentListadoRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -66,17 +76,20 @@ public class FragmentListadoProductos extends Fragment implements ProductoAdapte
                 Integer posicionActual = linearLayoutManager.findLastVisibleItemPosition();
                 Integer ultimaCelda = linearLayoutManager.getItemCount();
 
-                if (posicionActual.equals(ultimaCelda - 3)) {
+                if (posicionActual.equals(ultimaCelda - 1)) {
 
                     if (productoController.getHayMasProductos()) {
+                        if (!productoController.getHayPedido()) {
 
-                        productoController.getProductoPorSearchPaginado(productoContainer.getQuery(), new ResultListener<ProductoContainer>() {
-                            @Override
-                            public void onFinish(ProductoContainer result) {
-                                productoAdapter.agregarProductos(result.getProductoList());
-                            }
+                            productoController.getProductoPorSearchPaginado(query, new ResultListener<ProductoContainer>() {
+                                @Override
+                                public void onFinish(ProductoContainer result) {
+                                    productoAdapter.agregarProductos(result.getProductoList());
+                                }
 
-                        });
+
+                            });
+                        }
                     }
 
                 }

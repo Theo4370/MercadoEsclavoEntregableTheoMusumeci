@@ -33,6 +33,7 @@ public class ProductoAdapter extends RecyclerView.Adapter<ProductoAdapter.Produc
         this.listaDeProductos = listaDeProductos;
         this.productoAdapterListener = listener;
 
+
     }
 
     @NonNull
